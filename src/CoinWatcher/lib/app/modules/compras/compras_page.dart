@@ -1,4 +1,6 @@
+import 'package:CoinWatcher/app/models/comprador.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'compras_controller.dart';
 
@@ -21,6 +23,15 @@ class _ComprasPageState extends ModularState<ComprasPage, ComprasController> {
       ),
       body: Column(
         children: <Widget>[],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // controller.addComprador();
+          // print(await controller.getAllCompradores());
+          var compradores = await controller.getAllCompradores();
+          compradores.forEach((c) => print("${c.idComprador} | ${c.nome}"));
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

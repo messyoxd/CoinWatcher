@@ -1,36 +1,34 @@
-import 'package:CoinWatcher/app/modules/compras/models/compras.dart';
+import 'package:CoinWatcher/app/models/compras.dart';
+import 'package:CoinWatcher/app/shared/InterfacesRepositorios/ICompras.dart';
 
-import '../Interfaces/ICompras.dart';
-
-class ComprasSQLiteRepository implements ICompra{
+class ComprasSQLiteRepository implements ICompra {
   @override
-  Future addCompra(Compra novaCompra) {
+  Future addCompra(ModelCompra novaCompra) {
     // TODO: implement addCompra
     throw UnimplementedError();
   }
 
   @override
-  Future delete(int id) {
+  Future remove(int id) {
     // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Compra>> getAllCompras() {
+  Future<List<ModelCompra>> getAllCompras() {
     // TODO: implement getAllCompras
     throw UnimplementedError();
   }
 
   @override
-  Future<Compra> getCompra(int id) {
+  Future<ModelCompra> getCompra(int id) {
     // TODO: implement getCompra
     throw UnimplementedError();
   }
 
   @override
-  Future put(int id, Compra novaCompra) {
+  Future put(int id, ModelCompra novaCompra) {
     // TODO: implement put
     throw UnimplementedError();
   }
-
 }

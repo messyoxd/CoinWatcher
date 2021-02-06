@@ -36,6 +36,7 @@ dependencies:
   dio:
   flutter_mobx: 
   mobx: 
+  moor_flutter:
   flutter_modular: 
   flutter:
     sdk: flutter
@@ -48,6 +49,7 @@ dev_dependencies:
   mockito: 
   modular_codegen:
   mobx_codegen: 
+  moor_generator:
   build_runner: 
   flutter_test:
     sdk: flutter

@@ -1,0 +1,61 @@
+CREATE TABLE Compras (
+  idCompra INT NOT NULL AUTO_INCREMENT,
+  localDeCompra INT NOT NULL,
+  comprador INT NOT NULL,
+  PRIMARY KEY (idCompra),
+  CONSTRAINT comprador
+    FOREIGN KEY (comprador)
+    REFERENCES Compradores (idComprador)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT local
+    FOREIGN KEY (localDeCompra)
+    REFERENCES Localizacoes (idLocal)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE Compradores (
+  idComprador INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idComprador)
+) AS Comprador;
+
+CREATE TABLE Itens (
+  idItem INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  preco DOUBLE NOT NULL,
+  localComprado INT NOT NULL,
+  PRIMARY KEY (idItem),
+  CONSTRAINT localComprado
+    FOREIGN KEY (localComprado)
+    REFERENCES Localizacoes (idLocal)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) AS Item;
+
+
+CREATE TABLE Localizacoes (
+  idLocal INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idLocal)
+) AS Localizacao;
+
+
+CREATE TABLE ItensCompras (
+  idItensCompra INT NOT NULL AUTO_INCREMENT,
+  compra INT NOT NULL,
+  QuantidadeComprada INT NOT NULL,
+  itemComprado INT NOT NULL,
+  PRIMARY KEY (idItensCompra, itemComprado),
+  CONSTRAINT compraId
+    FOREIGN KEY (compra)
+    REFERENCES Compras (idCompra)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_ItensCompra_Item1
+    FOREIGN KEY (itemComprado)
+    REFERENCES Itens (idItem)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);

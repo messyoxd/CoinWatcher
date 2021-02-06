@@ -1,9 +1,9 @@
-class ItensCompra {
+class ModelItensCompra {
   int idItensCompra;
   int compra;
   int quantidadeComprada;
   int itemComprado;
-  ItensCompra(
+  ModelItensCompra(
       {this.idItensCompra,
       this.compra,
       this.itemComprado,

@@ -34,6 +34,14 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
     });
   }
 
+  final _$getAllCompradoresAsyncAction =
+      AsyncAction('_ComprasControllerBase.getAllCompradores');
+
+  @override
+  Future<List<ModelComprador>> getAllCompradores() {
+    return _$getAllCompradoresAsyncAction.run(() => super.getAllCompradores());
+  }
+
   final _$_ComprasControllerBaseActionController =
       ActionController(name: '_ComprasControllerBase');
 
@@ -43,6 +51,17 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
         name: '_ComprasControllerBase.increment');
     try {
       return super.increment();
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addComprador() {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.addComprador');
+    try {
+      return super.addComprador();
     } finally {
       _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
     }
