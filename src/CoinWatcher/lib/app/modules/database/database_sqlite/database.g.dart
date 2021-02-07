@@ -10,7 +10,13 @@ part of 'database.dart';
 class Comprador extends DataClass implements Insertable<Comprador> {
   final int idComprador;
   final String nome;
-  Comprador({@required this.idComprador, @required this.nome});
+  final String createdAt;
+  final String updatedAt;
+  Comprador(
+      {@required this.idComprador,
+      @required this.nome,
+      this.createdAt,
+      this.updatedAt});
   factory Comprador.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -20,6 +26,10 @@ class Comprador extends DataClass implements Insertable<Comprador> {
       idComprador: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}idComprador']),
       nome: stringType.mapFromDatabaseResponse(data['${effectivePrefix}nome']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
     );
   }
   @override
@@ -31,6 +41,12 @@ class Comprador extends DataClass implements Insertable<Comprador> {
     if (!nullToAbsent || nome != null) {
       map['nome'] = Variable<String>(nome);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
+    }
     return map;
   }
 
@@ -40,6 +56,12 @@ class Comprador extends DataClass implements Insertable<Comprador> {
           ? const Value.absent()
           : Value(idComprador),
       nome: nome == null && nullToAbsent ? const Value.absent() : Value(nome),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -49,6 +71,8 @@ class Comprador extends DataClass implements Insertable<Comprador> {
     return Comprador(
       idComprador: serializer.fromJson<int>(json['idComprador']),
       nome: serializer.fromJson<String>(json['nome']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
   @override
@@ -57,57 +81,84 @@ class Comprador extends DataClass implements Insertable<Comprador> {
     return <String, dynamic>{
       'idComprador': serializer.toJson<int>(idComprador),
       'nome': serializer.toJson<String>(nome),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
-  Comprador copyWith({int idComprador, String nome}) => Comprador(
+  Comprador copyWith(
+          {int idComprador, String nome, String createdAt, String updatedAt}) =>
+      Comprador(
         idComprador: idComprador ?? this.idComprador,
         nome: nome ?? this.nome,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
     return (StringBuffer('Comprador(')
           ..write('idComprador: $idComprador, ')
-          ..write('nome: $nome')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(idComprador.hashCode, nome.hashCode));
+  int get hashCode => $mrjf($mrjc(idComprador.hashCode,
+      $mrjc(nome.hashCode, $mrjc(createdAt.hashCode, updatedAt.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Comprador &&
           other.idComprador == this.idComprador &&
-          other.nome == this.nome);
+          other.nome == this.nome &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class CompradoresCompanion extends UpdateCompanion<Comprador> {
   final Value<int> idComprador;
   final Value<String> nome;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
   const CompradoresCompanion({
     this.idComprador = const Value.absent(),
     this.nome = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   CompradoresCompanion.insert({
     this.idComprador = const Value.absent(),
     @required String nome,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   }) : nome = Value(nome);
   static Insertable<Comprador> custom({
     Expression<int> idComprador,
     Expression<String> nome,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
   }) {
     return RawValuesInsertable({
       if (idComprador != null) 'idComprador': idComprador,
       if (nome != null) 'nome': nome,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     });
   }
 
-  CompradoresCompanion copyWith({Value<int> idComprador, Value<String> nome}) {
+  CompradoresCompanion copyWith(
+      {Value<int> idComprador,
+      Value<String> nome,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
     return CompradoresCompanion(
       idComprador: idComprador ?? this.idComprador,
       nome: nome ?? this.nome,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -120,6 +171,12 @@ class CompradoresCompanion extends UpdateCompanion<Comprador> {
     if (nome.present) {
       map['nome'] = Variable<String>(nome.value);
     }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
     return map;
   }
 
@@ -127,7 +184,9 @@ class CompradoresCompanion extends UpdateCompanion<Comprador> {
   String toString() {
     return (StringBuffer('CompradoresCompanion(')
           ..write('idComprador: $idComprador, ')
-          ..write('nome: $nome')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -155,8 +214,27 @@ class Compradores extends Table with TableInfo<Compradores, Comprador> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
   @override
-  List<GeneratedColumn> get $columns => [idComprador, nome];
+  List<GeneratedColumn> get $columns =>
+      [idComprador, nome, createdAt, updatedAt];
   @override
   Compradores get asDslTable => this;
   @override
@@ -179,6 +257,14 @@ class Compradores extends Table with TableInfo<Compradores, Comprador> {
           _nomeMeta, nome.isAcceptableOrUnknown(data['nome'], _nomeMeta));
     } else if (isInserting) {
       context.missing(_nomeMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
     }
     return context;
   }
@@ -205,7 +291,13 @@ class Compradores extends Table with TableInfo<Compradores, Comprador> {
 class Localizacao extends DataClass implements Insertable<Localizacao> {
   final int idLocal;
   final String nome;
-  Localizacao({@required this.idLocal, @required this.nome});
+  final String createdAt;
+  final String updatedAt;
+  Localizacao(
+      {@required this.idLocal,
+      @required this.nome,
+      this.createdAt,
+      this.updatedAt});
   factory Localizacao.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -215,6 +307,10 @@ class Localizacao extends DataClass implements Insertable<Localizacao> {
       idLocal:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}idLocal']),
       nome: stringType.mapFromDatabaseResponse(data['${effectivePrefix}nome']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
     );
   }
   @override
@@ -226,6 +322,12 @@ class Localizacao extends DataClass implements Insertable<Localizacao> {
     if (!nullToAbsent || nome != null) {
       map['nome'] = Variable<String>(nome);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
+    }
     return map;
   }
 
@@ -235,6 +337,12 @@ class Localizacao extends DataClass implements Insertable<Localizacao> {
           ? const Value.absent()
           : Value(idLocal),
       nome: nome == null && nullToAbsent ? const Value.absent() : Value(nome),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -244,6 +352,8 @@ class Localizacao extends DataClass implements Insertable<Localizacao> {
     return Localizacao(
       idLocal: serializer.fromJson<int>(json['idLocal']),
       nome: serializer.fromJson<String>(json['nome']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
   @override
@@ -252,57 +362,84 @@ class Localizacao extends DataClass implements Insertable<Localizacao> {
     return <String, dynamic>{
       'idLocal': serializer.toJson<int>(idLocal),
       'nome': serializer.toJson<String>(nome),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
-  Localizacao copyWith({int idLocal, String nome}) => Localizacao(
+  Localizacao copyWith(
+          {int idLocal, String nome, String createdAt, String updatedAt}) =>
+      Localizacao(
         idLocal: idLocal ?? this.idLocal,
         nome: nome ?? this.nome,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
     return (StringBuffer('Localizacao(')
           ..write('idLocal: $idLocal, ')
-          ..write('nome: $nome')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(idLocal.hashCode, nome.hashCode));
+  int get hashCode => $mrjf($mrjc(idLocal.hashCode,
+      $mrjc(nome.hashCode, $mrjc(createdAt.hashCode, updatedAt.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Localizacao &&
           other.idLocal == this.idLocal &&
-          other.nome == this.nome);
+          other.nome == this.nome &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class LocalizacoesCompanion extends UpdateCompanion<Localizacao> {
   final Value<int> idLocal;
   final Value<String> nome;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
   const LocalizacoesCompanion({
     this.idLocal = const Value.absent(),
     this.nome = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   LocalizacoesCompanion.insert({
     this.idLocal = const Value.absent(),
     @required String nome,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   }) : nome = Value(nome);
   static Insertable<Localizacao> custom({
     Expression<int> idLocal,
     Expression<String> nome,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
   }) {
     return RawValuesInsertable({
       if (idLocal != null) 'idLocal': idLocal,
       if (nome != null) 'nome': nome,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     });
   }
 
-  LocalizacoesCompanion copyWith({Value<int> idLocal, Value<String> nome}) {
+  LocalizacoesCompanion copyWith(
+      {Value<int> idLocal,
+      Value<String> nome,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
     return LocalizacoesCompanion(
       idLocal: idLocal ?? this.idLocal,
       nome: nome ?? this.nome,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -315,6 +452,12 @@ class LocalizacoesCompanion extends UpdateCompanion<Localizacao> {
     if (nome.present) {
       map['nome'] = Variable<String>(nome.value);
     }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
     return map;
   }
 
@@ -322,7 +465,9 @@ class LocalizacoesCompanion extends UpdateCompanion<Localizacao> {
   String toString() {
     return (StringBuffer('LocalizacoesCompanion(')
           ..write('idLocal: $idLocal, ')
-          ..write('nome: $nome')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -348,8 +493,26 @@ class Localizacoes extends Table with TableInfo<Localizacoes, Localizacao> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
   @override
-  List<GeneratedColumn> get $columns => [idLocal, nome];
+  List<GeneratedColumn> get $columns => [idLocal, nome, createdAt, updatedAt];
   @override
   Localizacoes get asDslTable => this;
   @override
@@ -370,6 +533,14 @@ class Localizacoes extends Table with TableInfo<Localizacoes, Localizacao> {
           _nomeMeta, nome.isAcceptableOrUnknown(data['nome'], _nomeMeta));
     } else if (isInserting) {
       context.missing(_nomeMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
     }
     return context;
   }
@@ -397,14 +568,19 @@ class Compra extends DataClass implements Insertable<Compra> {
   final int idCompra;
   final int localDeCompra;
   final int comprador;
+  final String createdAt;
+  final String updatedAt;
   Compra(
       {@required this.idCompra,
       @required this.localDeCompra,
-      @required this.comprador});
+      @required this.comprador,
+      this.createdAt,
+      this.updatedAt});
   factory Compra.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
     return Compra(
       idCompra:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}idCompra']),
@@ -412,6 +588,10 @@ class Compra extends DataClass implements Insertable<Compra> {
           .mapFromDatabaseResponse(data['${effectivePrefix}localDeCompra']),
       comprador:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}comprador']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
     );
   }
   @override
@@ -425,6 +605,12 @@ class Compra extends DataClass implements Insertable<Compra> {
     }
     if (!nullToAbsent || comprador != null) {
       map['comprador'] = Variable<int>(comprador);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
     }
     return map;
   }
@@ -440,6 +626,12 @@ class Compra extends DataClass implements Insertable<Compra> {
       comprador: comprador == null && nullToAbsent
           ? const Value.absent()
           : Value(comprador),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -450,6 +642,8 @@ class Compra extends DataClass implements Insertable<Compra> {
       idCompra: serializer.fromJson<int>(json['idCompra']),
       localDeCompra: serializer.fromJson<int>(json['localDeCompra']),
       comprador: serializer.fromJson<int>(json['comprador']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
   @override
@@ -459,69 +653,103 @@ class Compra extends DataClass implements Insertable<Compra> {
       'idCompra': serializer.toJson<int>(idCompra),
       'localDeCompra': serializer.toJson<int>(localDeCompra),
       'comprador': serializer.toJson<int>(comprador),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
-  Compra copyWith({int idCompra, int localDeCompra, int comprador}) => Compra(
+  Compra copyWith(
+          {int idCompra,
+          int localDeCompra,
+          int comprador,
+          String createdAt,
+          String updatedAt}) =>
+      Compra(
         idCompra: idCompra ?? this.idCompra,
         localDeCompra: localDeCompra ?? this.localDeCompra,
         comprador: comprador ?? this.comprador,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
     return (StringBuffer('Compra(')
           ..write('idCompra: $idCompra, ')
           ..write('localDeCompra: $localDeCompra, ')
-          ..write('comprador: $comprador')
+          ..write('comprador: $comprador, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => $mrjf($mrjc(
-      idCompra.hashCode, $mrjc(localDeCompra.hashCode, comprador.hashCode)));
+      idCompra.hashCode,
+      $mrjc(
+          localDeCompra.hashCode,
+          $mrjc(comprador.hashCode,
+              $mrjc(createdAt.hashCode, updatedAt.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Compra &&
           other.idCompra == this.idCompra &&
           other.localDeCompra == this.localDeCompra &&
-          other.comprador == this.comprador);
+          other.comprador == this.comprador &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ComprasCompanion extends UpdateCompanion<Compra> {
   final Value<int> idCompra;
   final Value<int> localDeCompra;
   final Value<int> comprador;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
   const ComprasCompanion({
     this.idCompra = const Value.absent(),
     this.localDeCompra = const Value.absent(),
     this.comprador = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   ComprasCompanion.insert({
     this.idCompra = const Value.absent(),
     @required int localDeCompra,
     @required int comprador,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : localDeCompra = Value(localDeCompra),
         comprador = Value(comprador);
   static Insertable<Compra> custom({
     Expression<int> idCompra,
     Expression<int> localDeCompra,
     Expression<int> comprador,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
   }) {
     return RawValuesInsertable({
       if (idCompra != null) 'idCompra': idCompra,
       if (localDeCompra != null) 'localDeCompra': localDeCompra,
       if (comprador != null) 'comprador': comprador,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     });
   }
 
   ComprasCompanion copyWith(
-      {Value<int> idCompra, Value<int> localDeCompra, Value<int> comprador}) {
+      {Value<int> idCompra,
+      Value<int> localDeCompra,
+      Value<int> comprador,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
     return ComprasCompanion(
       idCompra: idCompra ?? this.idCompra,
       localDeCompra: localDeCompra ?? this.localDeCompra,
       comprador: comprador ?? this.comprador,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -537,6 +765,12 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
     if (comprador.present) {
       map['comprador'] = Variable<int>(comprador.value);
     }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
     return map;
   }
 
@@ -545,7 +779,9 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
     return (StringBuffer('ComprasCompanion(')
           ..write('idCompra: $idCompra, ')
           ..write('localDeCompra: $localDeCompra, ')
-          ..write('comprador: $comprador')
+          ..write('comprador: $comprador, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -581,8 +817,27 @@ class Compras extends Table with TableInfo<Compras, Compra> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
   @override
-  List<GeneratedColumn> get $columns => [idCompra, localDeCompra, comprador];
+  List<GeneratedColumn> get $columns =>
+      [idCompra, localDeCompra, comprador, createdAt, updatedAt];
   @override
   Compras get asDslTable => this;
   @override
@@ -611,6 +866,14 @@ class Compras extends Table with TableInfo<Compras, Compra> {
           comprador.isAcceptableOrUnknown(data['comprador'], _compradorMeta));
     } else if (isInserting) {
       context.missing(_compradorMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
     }
     return context;
   }
@@ -643,11 +906,15 @@ class Item extends DataClass implements Insertable<Item> {
   final String nome;
   final double preco;
   final int localComprado;
+  final String createdAt;
+  final String updatedAt;
   Item(
       {@required this.idItem,
       @required this.nome,
       @required this.preco,
-      @required this.localComprado});
+      @required this.localComprado,
+      this.createdAt,
+      this.updatedAt});
   factory Item.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -661,6 +928,10 @@ class Item extends DataClass implements Insertable<Item> {
           doubleType.mapFromDatabaseResponse(data['${effectivePrefix}preco']),
       localComprado: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}localComprado']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
     );
   }
   @override
@@ -678,6 +949,12 @@ class Item extends DataClass implements Insertable<Item> {
     if (!nullToAbsent || localComprado != null) {
       map['localComprado'] = Variable<int>(localComprado);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
+    }
     return map;
   }
 
@@ -691,6 +968,12 @@ class Item extends DataClass implements Insertable<Item> {
       localComprado: localComprado == null && nullToAbsent
           ? const Value.absent()
           : Value(localComprado),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -702,6 +985,8 @@ class Item extends DataClass implements Insertable<Item> {
       nome: serializer.fromJson<String>(json['nome']),
       preco: serializer.fromJson<double>(json['preco']),
       localComprado: serializer.fromJson<int>(json['localComprado']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
   @override
@@ -712,15 +997,25 @@ class Item extends DataClass implements Insertable<Item> {
       'nome': serializer.toJson<String>(nome),
       'preco': serializer.toJson<double>(preco),
       'localComprado': serializer.toJson<int>(localComprado),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
-  Item copyWith({int idItem, String nome, double preco, int localComprado}) =>
+  Item copyWith(
+          {int idItem,
+          String nome,
+          double preco,
+          int localComprado,
+          String createdAt,
+          String updatedAt}) =>
       Item(
         idItem: idItem ?? this.idItem,
         nome: nome ?? this.nome,
         preco: preco ?? this.preco,
         localComprado: localComprado ?? this.localComprado,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
@@ -728,14 +1023,22 @@ class Item extends DataClass implements Insertable<Item> {
           ..write('idItem: $idItem, ')
           ..write('nome: $nome, ')
           ..write('preco: $preco, ')
-          ..write('localComprado: $localComprado')
+          ..write('localComprado: $localComprado, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(idItem.hashCode,
-      $mrjc(nome.hashCode, $mrjc(preco.hashCode, localComprado.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      idItem.hashCode,
+      $mrjc(
+          nome.hashCode,
+          $mrjc(
+              preco.hashCode,
+              $mrjc(localComprado.hashCode,
+                  $mrjc(createdAt.hashCode, updatedAt.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -743,7 +1046,9 @@ class Item extends DataClass implements Insertable<Item> {
           other.idItem == this.idItem &&
           other.nome == this.nome &&
           other.preco == this.preco &&
-          other.localComprado == this.localComprado);
+          other.localComprado == this.localComprado &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ItensCompanion extends UpdateCompanion<Item> {
@@ -751,17 +1056,23 @@ class ItensCompanion extends UpdateCompanion<Item> {
   final Value<String> nome;
   final Value<double> preco;
   final Value<int> localComprado;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
   const ItensCompanion({
     this.idItem = const Value.absent(),
     this.nome = const Value.absent(),
     this.preco = const Value.absent(),
     this.localComprado = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   ItensCompanion.insert({
     this.idItem = const Value.absent(),
     @required String nome,
     @required double preco,
     @required int localComprado,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : nome = Value(nome),
         preco = Value(preco),
         localComprado = Value(localComprado);
@@ -770,12 +1081,16 @@ class ItensCompanion extends UpdateCompanion<Item> {
     Expression<String> nome,
     Expression<double> preco,
     Expression<int> localComprado,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
   }) {
     return RawValuesInsertable({
       if (idItem != null) 'idItem': idItem,
       if (nome != null) 'nome': nome,
       if (preco != null) 'preco': preco,
       if (localComprado != null) 'localComprado': localComprado,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     });
   }
 
@@ -783,12 +1098,16 @@ class ItensCompanion extends UpdateCompanion<Item> {
       {Value<int> idItem,
       Value<String> nome,
       Value<double> preco,
-      Value<int> localComprado}) {
+      Value<int> localComprado,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
     return ItensCompanion(
       idItem: idItem ?? this.idItem,
       nome: nome ?? this.nome,
       preco: preco ?? this.preco,
       localComprado: localComprado ?? this.localComprado,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -807,6 +1126,12 @@ class ItensCompanion extends UpdateCompanion<Item> {
     if (localComprado.present) {
       map['localComprado'] = Variable<int>(localComprado.value);
     }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
     return map;
   }
 
@@ -816,7 +1141,9 @@ class ItensCompanion extends UpdateCompanion<Item> {
           ..write('idItem: $idItem, ')
           ..write('nome: $nome, ')
           ..write('preco: $preco, ')
-          ..write('localComprado: $localComprado')
+          ..write('localComprado: $localComprado, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -860,8 +1187,27 @@ class Itens extends Table with TableInfo<Itens, Item> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
   @override
-  List<GeneratedColumn> get $columns => [idItem, nome, preco, localComprado];
+  List<GeneratedColumn> get $columns =>
+      [idItem, nome, preco, localComprado, createdAt, updatedAt];
   @override
   Itens get asDslTable => this;
   @override
@@ -897,6 +1243,14 @@ class Itens extends Table with TableInfo<Itens, Item> {
     } else if (isInserting) {
       context.missing(_localCompradoMeta);
     }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
+    }
     return context;
   }
 
@@ -927,15 +1281,20 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
   final int compra;
   final int quantidadeComprada;
   final int itemComprado;
+  final String createdAt;
+  final String updatedAt;
   ItensCompra(
       {@required this.idItensCompra,
       @required this.compra,
       @required this.quantidadeComprada,
-      @required this.itemComprado});
+      @required this.itemComprado,
+      this.createdAt,
+      this.updatedAt});
   factory ItensCompra.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
     return ItensCompra(
       idItensCompra: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}idItensCompra']),
@@ -944,6 +1303,10 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
           data['${effectivePrefix}QuantidadeComprada']),
       itemComprado: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}itemComprado']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
     );
   }
   @override
@@ -961,6 +1324,12 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
     if (!nullToAbsent || itemComprado != null) {
       map['itemComprado'] = Variable<int>(itemComprado);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
+    }
     return map;
   }
 
@@ -977,6 +1346,12 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
       itemComprado: itemComprado == null && nullToAbsent
           ? const Value.absent()
           : Value(itemComprado),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -988,6 +1363,8 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
       compra: serializer.fromJson<int>(json['compra']),
       quantidadeComprada: serializer.fromJson<int>(json['QuantidadeComprada']),
       itemComprado: serializer.fromJson<int>(json['itemComprado']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
   @override
@@ -998,6 +1375,8 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
       'compra': serializer.toJson<int>(compra),
       'QuantidadeComprada': serializer.toJson<int>(quantidadeComprada),
       'itemComprado': serializer.toJson<int>(itemComprado),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
@@ -1005,12 +1384,16 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
           {int idItensCompra,
           int compra,
           int quantidadeComprada,
-          int itemComprado}) =>
+          int itemComprado,
+          String createdAt,
+          String updatedAt}) =>
       ItensCompra(
         idItensCompra: idItensCompra ?? this.idItensCompra,
         compra: compra ?? this.compra,
         quantidadeComprada: quantidadeComprada ?? this.quantidadeComprada,
         itemComprado: itemComprado ?? this.itemComprado,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
@@ -1018,7 +1401,9 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
           ..write('idItensCompra: $idItensCompra, ')
           ..write('compra: $compra, ')
           ..write('quantidadeComprada: $quantidadeComprada, ')
-          ..write('itemComprado: $itemComprado')
+          ..write('itemComprado: $itemComprado, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -1026,8 +1411,12 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
   @override
   int get hashCode => $mrjf($mrjc(
       idItensCompra.hashCode,
-      $mrjc(compra.hashCode,
-          $mrjc(quantidadeComprada.hashCode, itemComprado.hashCode))));
+      $mrjc(
+          compra.hashCode,
+          $mrjc(
+              quantidadeComprada.hashCode,
+              $mrjc(itemComprado.hashCode,
+                  $mrjc(createdAt.hashCode, updatedAt.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1035,7 +1424,9 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
           other.idItensCompra == this.idItensCompra &&
           other.compra == this.compra &&
           other.quantidadeComprada == this.quantidadeComprada &&
-          other.itemComprado == this.itemComprado);
+          other.itemComprado == this.itemComprado &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
@@ -1043,17 +1434,23 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
   final Value<int> compra;
   final Value<int> quantidadeComprada;
   final Value<int> itemComprado;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
   const ItensComprasCompanion({
     this.idItensCompra = const Value.absent(),
     this.compra = const Value.absent(),
     this.quantidadeComprada = const Value.absent(),
     this.itemComprado = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   ItensComprasCompanion.insert({
     @required int idItensCompra,
     @required int compra,
     @required int quantidadeComprada,
     @required int itemComprado,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : idItensCompra = Value(idItensCompra),
         compra = Value(compra),
         quantidadeComprada = Value(quantidadeComprada),
@@ -1063,12 +1460,16 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
     Expression<int> compra,
     Expression<int> quantidadeComprada,
     Expression<int> itemComprado,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
   }) {
     return RawValuesInsertable({
       if (idItensCompra != null) 'idItensCompra': idItensCompra,
       if (compra != null) 'compra': compra,
       if (quantidadeComprada != null) 'QuantidadeComprada': quantidadeComprada,
       if (itemComprado != null) 'itemComprado': itemComprado,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     });
   }
 
@@ -1076,12 +1477,16 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
       {Value<int> idItensCompra,
       Value<int> compra,
       Value<int> quantidadeComprada,
-      Value<int> itemComprado}) {
+      Value<int> itemComprado,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
     return ItensComprasCompanion(
       idItensCompra: idItensCompra ?? this.idItensCompra,
       compra: compra ?? this.compra,
       quantidadeComprada: quantidadeComprada ?? this.quantidadeComprada,
       itemComprado: itemComprado ?? this.itemComprado,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -1100,6 +1505,12 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
     if (itemComprado.present) {
       map['itemComprado'] = Variable<int>(itemComprado.value);
     }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
     return map;
   }
 
@@ -1109,7 +1520,9 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
           ..write('idItensCompra: $idItensCompra, ')
           ..write('compra: $compra, ')
           ..write('quantidadeComprada: $quantidadeComprada, ')
-          ..write('itemComprado: $itemComprado')
+          ..write('itemComprado: $itemComprado, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -1157,9 +1570,33 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
   @override
-  List<GeneratedColumn> get $columns =>
-      [idItensCompra, compra, quantidadeComprada, itemComprado];
+  List<GeneratedColumn> get $columns => [
+        idItensCompra,
+        compra,
+        quantidadeComprada,
+        itemComprado,
+        createdAt,
+        updatedAt
+      ];
   @override
   ItensCompras get asDslTable => this;
   @override
@@ -1200,6 +1637,14 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
               data['itemComprado'], _itemCompradoMeta));
     } else if (isInserting) {
       context.missing(_itemCompradoMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
     }
     return context;
   }

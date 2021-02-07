@@ -29,7 +29,8 @@ class _ComprasPageState extends ModularState<ComprasPage, ComprasController> {
           // controller.addComprador();
           // print(await controller.getAllCompradores());
           var compradores = await controller.getAllCompradores();
-          compradores.forEach((c) => print("${c.idComprador} | ${c.nome}"));
+          compradores.forEach((c) => print("${c.idComprador} | ${c.nome} | ${c.createdAt}"));
+          // await controller.deleteComprador(1);
         },
         child: Icon(Icons.add),
       ),

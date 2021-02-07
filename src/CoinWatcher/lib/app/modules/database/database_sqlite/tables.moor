@@ -1,7 +1,9 @@
 CREATE TABLE Compras (
-  idCompra INT NOT NULL AUTO_INCREMENT,
+  idCompra INT NOT NULL,
   localDeCompra INT NOT NULL,
   comprador INT NOT NULL,
+  createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
+  updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idCompra),
   CONSTRAINT comprador
     FOREIGN KEY (comprador)
@@ -16,16 +18,20 @@ CREATE TABLE Compras (
 );
 
 CREATE TABLE Compradores (
-  idComprador INT NOT NULL AUTO_INCREMENT,
+  idComprador INT NOT NULL,
   nome VARCHAR(45) NOT NULL,
+  createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
+  updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idComprador)
 ) AS Comprador;
 
 CREATE TABLE Itens (
-  idItem INT NOT NULL AUTO_INCREMENT,
+  idItem INT NOT NULL,
   nome VARCHAR(45) NOT NULL,
   preco DOUBLE NOT NULL,
   localComprado INT NOT NULL,
+  createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
+  updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idItem),
   CONSTRAINT localComprado
     FOREIGN KEY (localComprado)
@@ -36,17 +42,21 @@ CREATE TABLE Itens (
 
 
 CREATE TABLE Localizacoes (
-  idLocal INT NOT NULL AUTO_INCREMENT,
+  idLocal INT NOT NULL,
   nome VARCHAR(45) NOT NULL,
+  createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
+  updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idLocal)
 ) AS Localizacao;
 
 
 CREATE TABLE ItensCompras (
-  idItensCompra INT NOT NULL AUTO_INCREMENT,
+  idItensCompra INT NOT NULL,
   compra INT NOT NULL,
   QuantidadeComprada INT NOT NULL,
   itemComprado INT NOT NULL,
+  createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
+  updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idItensCompra, itemComprado),
   CONSTRAINT compraId
     FOREIGN KEY (compra)

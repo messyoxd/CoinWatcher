@@ -1,6 +1,13 @@
-class ModelCompra{
+class ModelCompra {
   int idCompra;
   int localDeCompra;
   int comprador;
-  ModelCompra({this.idCompra,this.localDeCompra, this.comprador});
+  DateTime createdAt;
+  DateTime updatedAt;
+  ModelCompra(
+      {this.idCompra,
+      this.localDeCompra,
+      this.comprador,
+      this.createdAt,
+      this.updatedAt});
 }

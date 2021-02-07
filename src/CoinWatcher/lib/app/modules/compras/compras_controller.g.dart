@@ -42,6 +42,14 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
     return _$getAllCompradoresAsyncAction.run(() => super.getAllCompradores());
   }
 
+  final _$deleteCompradorAsyncAction =
+      AsyncAction('_ComprasControllerBase.deleteComprador');
+
+  @override
+  Future<int> deleteComprador(int id) {
+    return _$deleteCompradorAsyncAction.run(() => super.deleteComprador(id));
+  }
+
   final _$_ComprasControllerBaseActionController =
       ActionController(name: '_ComprasControllerBase');
 

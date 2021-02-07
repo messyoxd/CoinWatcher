@@ -1,5 +1,7 @@
-class ModelItem{
+class ModelItem {
   int idLocal;
   int idNome;
-  ModelItem({this.idLocal, this.idNome});
+  DateTime createdAt;
+  DateTime updatedAt;
+  ModelItem({this.idLocal, this.idNome, this.createdAt, this.updatedAt});
 }

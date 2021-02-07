@@ -1,5 +1,7 @@
-class ModelComprador{
+class ModelComprador {
   int idComprador;
   String nome;
-  ModelComprador({this.idComprador,this.nome});
+  DateTime createdAt;
+  DateTime updatedAt;
+  ModelComprador({this.idComprador, this.nome, this.createdAt, this.updatedAt});
 }

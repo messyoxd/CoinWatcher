@@ -8,13 +8,18 @@ class CoinWatcherDb extends _$CoinWatcherDb {
   // singleton
   static final CoinWatcherDb instance = CoinWatcherDb._internal();
 
-  getCompradoresAll(){
-    select(compradores).get();
-  }
-
   CoinWatcherDb._internal()
-      : super(FlutterQueryExecutor.inDatabaseFolder(path: 'coin_watcher.db', logStatements: true));
+      : super(FlutterQueryExecutor.inDatabaseFolder(
+            path: 'coin_watcher.db', logStatements: true));
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  // TODO: implement migration
+  MigrationStrategy get migration =>
+      MigrationStrategy(
+        beforeOpen: (db) async {
+        await customStatement("PRAGMA foreign_keys = ON");
+      });
 }

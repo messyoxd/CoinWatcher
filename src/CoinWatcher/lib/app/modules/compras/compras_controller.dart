@@ -24,11 +24,16 @@ abstract class _ComprasControllerBase with Store {
   @action
   void addComprador() {
     compradorRepository
-        .addComprador(ModelComprador(idComprador: 1, nome: "Teste"));
+        .addComprador(ModelComprador(nome: "Teste"));
   }
 
   @action
   Future<List<ModelComprador>> getAllCompradores() async {
     return await compradorRepository.getAllComprador();
+  }
+
+  @action
+  Future<int> deleteComprador(int id) async {
+    return await compradorRepository.remove(id) as int;
   }
 }
