@@ -1687,6 +1687,12 @@ abstract class _$CoinWatcherDb extends GeneratedDatabase {
   CompradoresSQLiteDAO _compradoresSQLiteDAO;
   CompradoresSQLiteDAO get compradoresSQLiteDAO =>
       _compradoresSQLiteDAO ??= CompradoresSQLiteDAO(this as CoinWatcherDb);
+  ItensSQLiteDAO _itensSQLiteDAO;
+  ItensSQLiteDAO get itensSQLiteDAO =>
+      _itensSQLiteDAO ??= ItensSQLiteDAO(this as CoinWatcherDb);
+  LocalizacoesSQLiteDAO _localizacoesSQLiteDAO;
+  LocalizacoesSQLiteDAO get localizacoesSQLiteDAO =>
+      _localizacoesSQLiteDAO ??= LocalizacoesSQLiteDAO(this as CoinWatcherDb);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

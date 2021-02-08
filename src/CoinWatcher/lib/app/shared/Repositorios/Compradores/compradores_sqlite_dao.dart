@@ -16,16 +16,18 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
         "insert into compradores (nome, createdAt, updatedAt) values " +
             "('${novoComprador.nome}', '${DateTime.now()}', '${DateTime.now()}')" +
             ";";
+    int sucesso;
     try {
-      await customInsert(sqlString);
+      sucesso = await customInsert(sqlString);
     } catch (e) {
       print(e.toString());
+      throw (e.toString());
     }
+    return sucesso;
   }
 
   @override
   Future remove(int id) async {
-    // TODO: implement delete
     String sqlString =
         "delete from compradores where idComprador = " + "'$id'" + ";";
     int i;
@@ -34,14 +36,13 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
           updates: {db.compradores}, updateKind: UpdateKind.delete);
     } catch (e) {
       print(e.toString());
+      throw (e.toString());
     }
-    print(i);
     return i;
   }
 
   @override
   Future<List<ModelComprador>> getAllComprador() async {
-    // TODO: implement getAllComprador
     String sqlString = "select * from compradores";
     List<Comprador> aux = [];
     try {
@@ -54,7 +55,7 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       });
     } catch (e) {
       print(e.toString());
-      return [];
+      throw(e.toString());
     }
 
     List<ModelComprador> modelCompradores = [];
@@ -69,14 +70,46 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   }
 
   @override
-  Future<ModelComprador> getComprador(int id) {
-    // TODO: implement getComprador
-    throw UnimplementedError();
+  Future<ModelComprador> getComprador(int id) async {
+    String sqlString = "select * from compradores where idComprador = " +
+        "'$id'"
+            "LIMIT 1;";
+    Comprador aux;
+    try {
+      await customSelect(sqlString, readsFrom: {db.compradores})
+          .get()
+          .then((row) {
+        aux = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+
+    return ModelComprador(
+      idComprador: aux.idComprador,
+      nome: aux.nome,
+      createdAt: DateTime.parse(aux.createdAt),
+      updatedAt: DateTime.parse(aux.updatedAt),
+    );
   }
 
   @override
-  Future put(int id, ModelComprador novoComprador) {
-    // TODO: implement put
-    throw UnimplementedError();
+  Future put(int id, ModelComprador novoComprador) async {
+    String sqlString = "UPDATE compradores SET " +
+        "nome = '${novoComprador.nome}'" +
+        "updatedAt = '${DateTime.now()}'" +
+        "WHERE idComprador = " +
+        "'$id'"
+            ";";
+    int sucesso;
+    try {
+      sucesso = await customUpdate(sqlString,
+          updates: {db.compradores}, updateKind: UpdateKind.update);
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    return sucesso;
   }
 }

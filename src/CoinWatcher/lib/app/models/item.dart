@@ -1,7 +1,15 @@
 class ModelItem {
+  int idItem;
   int idLocal;
-  int idNome;
+  double preco;
+  String nome;
   DateTime createdAt;
   DateTime updatedAt;
-  ModelItem({this.idLocal, this.idNome, this.createdAt, this.updatedAt});
+  ModelItem(
+      {this.idItem,
+      this.idLocal,
+      this.preco,
+      this.nome,
+      this.createdAt,
+      this.updatedAt});
 }
