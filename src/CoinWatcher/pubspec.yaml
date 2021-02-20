@@ -38,6 +38,7 @@ dependencies:
   mobx: 
   moor_flutter:
   flutter_modular: 
+  adobe_xd: ^1.1.0+1
   flutter:
     sdk: flutter
 
