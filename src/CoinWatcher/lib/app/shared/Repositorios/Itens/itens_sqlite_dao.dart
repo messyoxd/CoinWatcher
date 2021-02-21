@@ -12,18 +12,30 @@ class ItensSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   ItensSQLiteDAO(CoinWatcherDb db) : super(db);
   @override
   Future addItem(ModelItem novoItem) async {
+    var createdAt = DateTime.now();
     String sqlString =
         "insert into itens (nome, preco, localComprado, createdAt, updatedAt) values " +
-            "('${novoItem.nome}','${novoItem.preco}','${novoItem.idLocal}', '${DateTime.now()}', '${DateTime.now()}')" +
+            "('${novoItem.nome}','${novoItem.preco}','${novoItem.idLocal}', '$createdAt', '${DateTime.now()}')" +
             ";";
-    int sucesso;
+    Item id;
     try {
-      sucesso = await customInsert(sqlString);
+      await customInsert(sqlString);
+      await customSelect("select * from itens where createdAt = '$createdAt' LIMIT 1;").get().then((row){
+        id = Item.fromData(row.first.data, db);
+      });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    return sucesso;
+
+    return ModelItem(
+      idItem: id.idItem,
+      idLocal: id.localComprado,
+      nome: id.nome,
+      preco: id.preco,
+      createdAt: DateTime.parse(id.createdAt),
+      updatedAt: DateTime.parse(id.updatedAt),
+    );
   }
 
   @override

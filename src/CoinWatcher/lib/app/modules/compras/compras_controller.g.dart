@@ -34,6 +34,64 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
     });
   }
 
+  final _$criarCompraCurrentStepAtom =
+      Atom(name: '_ComprasControllerBase.criarCompraCurrentStep');
+
+  @override
+  int get criarCompraCurrentStep {
+    _$criarCompraCurrentStepAtom.reportRead();
+    return super.criarCompraCurrentStep;
+  }
+
+  @override
+  set criarCompraCurrentStep(int value) {
+    _$criarCompraCurrentStepAtom
+        .reportWrite(value, super.criarCompraCurrentStep, () {
+      super.criarCompraCurrentStep = value;
+    });
+  }
+
+  final _$criarCompraStepsAtom =
+      Atom(name: '_ComprasControllerBase.criarCompraSteps');
+
+  @override
+  int get criarCompraSteps {
+    _$criarCompraStepsAtom.reportRead();
+    return super.criarCompraSteps;
+  }
+
+  @override
+  set criarCompraSteps(int value) {
+    _$criarCompraStepsAtom.reportWrite(value, super.criarCompraSteps, () {
+      super.criarCompraSteps = value;
+    });
+  }
+
+  final _$itensCompraAtom = Atom(name: '_ComprasControllerBase.itensCompra');
+
+  @override
+  ObservableList<ModelItensCompra> get itensCompra {
+    _$itensCompraAtom.reportRead();
+    return super.itensCompra;
+  }
+
+  @override
+  set itensCompra(ObservableList<ModelItensCompra> value) {
+    _$itensCompraAtom.reportWrite(value, super.itensCompra, () {
+      super.itensCompra = value;
+    });
+  }
+
+  final _$createCompraAsyncAction =
+      AsyncAction('_ComprasControllerBase.createCompra');
+
+  @override
+  Future createCompra(
+      String compradorNome, String compraNome, String localDeCompra) {
+    return _$createCompraAsyncAction.run(
+        () => super.createCompra(compradorNome, compraNome, localDeCompra));
+  }
+
   final _$getAllCompradoresAsyncAction =
       AsyncAction('_ComprasControllerBase.getAllCompradores');
 
@@ -52,6 +110,61 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
 
   final _$_ComprasControllerBaseActionController =
       ActionController(name: '_ComprasControllerBase');
+
+  @override
+  dynamic goTo(int step) {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.goTo');
+    try {
+      return super.goTo(step);
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addItemToList(ModelItensCompra newItem) {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.addItemToList');
+    try {
+      return super.addItemToList(newItem);
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeItemFromList(int index) {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.removeItemFromList');
+    try {
+      return super.removeItemFromList(index);
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic nextStep() {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.nextStep');
+    try {
+      return super.nextStep();
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic previousStep() {
+    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
+        name: '_ComprasControllerBase.previousStep');
+    try {
+      return super.previousStep();
+    } finally {
+      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void increment() {
@@ -78,7 +191,10 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+value: ${value},
+criarCompraCurrentStep: ${criarCompraCurrentStep},
+criarCompraSteps: ${criarCompraSteps},
+itensCompra: ${itensCompra}
     ''';
   }
 }

@@ -1,8 +1,10 @@
+import 'package:CoinWatcher/app/models/item.dart';
+
 class ModelItensCompra {
   int idItensCompra;
   int compra;
   int quantidadeComprada;
-  int itemComprado;
+  ModelItem itemComprado;
   DateTime createdAt;
   DateTime updatedAt;
   ModelItensCompra(

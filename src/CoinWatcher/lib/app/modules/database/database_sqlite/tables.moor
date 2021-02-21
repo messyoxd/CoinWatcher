@@ -2,6 +2,7 @@ CREATE TABLE Compras (
   idCompra INT NOT NULL,
   localDeCompra INT NOT NULL,
   comprador INT NOT NULL,
+  nomeCompra VARCHAR(45) NOT NULL, 
   createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idCompra),

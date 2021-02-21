@@ -12,18 +12,22 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future addComprador(ModelComprador novoComprador) async {
+    var createdAt = DateTime.now();
     String sqlString =
         "insert into compradores (nome, createdAt, updatedAt) values " +
-            "('${novoComprador.nome}', '${DateTime.now()}', '${DateTime.now()}')" +
+            "('${novoComprador.nome}', '$createdAt', '${DateTime.now()}')" +
             ";";
-    int sucesso;
+    Comprador id;
     try {
-      sucesso = await customInsert(sqlString);
+      await customInsert(sqlString);
+      await customSelect("select * from compradores where createdAt = '$createdAt' LIMIT 1;").get().then((row){
+        id = Comprador.fromData(row.first.data, db);
+      });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    return sucesso;
+    return id;
   }
 
   @override
@@ -55,7 +59,7 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       });
     } catch (e) {
       print(e.toString());
-      throw(e.toString());
+      throw (e.toString());
     }
 
     List<ModelComprador> modelCompradores = [];
@@ -67,6 +71,30 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
           updatedAt: DateTime.parse(value.updatedAt)));
     });
     return modelCompradores;
+  }
+
+  @override
+  Future<ModelComprador> getCompradorByName(String nome) async {
+    String sqlString = "select * from compradores where nome = " +
+        "'$nome'"
+            "LIMIT 1;";
+    Comprador aux;
+    try {
+      await customSelect(sqlString, readsFrom: {db.compradores})
+          .get()
+          .then((row) {
+        aux = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    return ModelComprador(
+      idComprador: aux.idComprador,
+      nome: aux.nome,
+      createdAt: DateTime.parse(aux.createdAt),
+      updatedAt: DateTime.parse(aux.updatedAt),
+    );
   }
 
   @override
