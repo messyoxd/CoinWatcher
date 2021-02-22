@@ -20,14 +20,21 @@ class LocalizacoesSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
     Localizacao id;
     try {
       await customInsert(sqlString);
-      await customSelect("select * from localizacoes where createdAt = '$createdAt' LIMIT 1;").get().then((row){
+      await customSelect(
+              "select * from localizacoes where createdAt = '$createdAt' LIMIT 1;")
+          .get()
+          .then((row) {
         id = Localizacao.fromData(row.first.data, db);
       });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    return id;
+    return ModelLocalizacao(
+        idLocal: id.idLocal,
+        nome: id.nome,
+        createdAt: DateTime.parse(id.createdAt),
+        updatedAt: DateTime.parse(id.updatedAt));
   }
 
   @override
@@ -101,8 +108,8 @@ class LocalizacoesSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future put(int id, ModelLocalizacao novoLocal) async {
     String sqlString = "UPDATE localizacoes SET " +
-        "nome = '${novoLocal.nome}'" +
-        "updatedAt = '${DateTime.now()}'" +
+        "nome = '${novoLocal.nome}', " +
+        "updatedAt = '${DateTime.now()}', " +
         "WHERE idLocal = " +
         "'$id'"
             ";";

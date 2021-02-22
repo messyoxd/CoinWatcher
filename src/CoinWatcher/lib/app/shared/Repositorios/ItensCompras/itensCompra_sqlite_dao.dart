@@ -1,5 +1,8 @@
+import 'package:CoinWatcher/app/models/comprador.dart';
+import 'package:CoinWatcher/app/models/compras.dart';
 import 'package:CoinWatcher/app/models/item.dart';
 import 'package:CoinWatcher/app/models/itens_compra.dart';
+import 'package:CoinWatcher/app/models/localizacao.dart';
 import 'package:CoinWatcher/app/modules/database/database_sqlite/database.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/IItensCompras.dart';
 import 'package:moor_flutter/moor_flutter.dart';
@@ -17,14 +20,14 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   Future addItensCompra(ModelItensCompra novoItensCompra) async {
     var createdAt = DateTime.now();
     String sqlString =
-        "insert into itenscompras (compra, QuantidadeComprada, itemComprado, createdAt, updatedAt) values " +
-            "('${novoItensCompra.compra}','${novoItensCompra.quantidadeComprada}','${novoItensCompra.itemComprado.idItem}', '$createdAt', '${DateTime.now()}')" +
+        "insert into itensCompras (compra, QuantidadeComprada, itemComprado, createdAt, updatedAt) values " +
+            "('${novoItensCompra.compra.idCompra}','${novoItensCompra.quantidadeComprada}','${novoItensCompra.itemComprado.idItem}', '$createdAt', '${DateTime.now()}')" +
             ";";
     ItensCompra id;
     try {
       await customInsert(sqlString);
       await customSelect(
-              "select * from itenscompras where createdAt = '$createdAt' LIMIT 1;")
+              "select * from itensCompras where createdAt = '$createdAt' LIMIT 1;")
           .get()
           .then((row) {
         id = ItensCompra.fromData(row.first.data, db);
@@ -33,9 +36,60 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       print(e.toString());
       throw (e.toString());
     }
+    Compra id2;
+    try {
+      await customSelect(
+              "select * from compras where idCompra = '${id.compra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Compra.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Comprador id3;
+    try {
+      await customSelect(
+              "select * from compradores where idComprador = '${id2.comprador}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id3 = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Localizacao id4;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${id2.localDeCompra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id4 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
     return ModelItensCompra(
       itemComprado: novoItensCompra.itemComprado,
-      compra: id.compra,
+      compra: ModelCompra(
+          comprador: ModelComprador(
+              nome: id3.nome,
+              idComprador: id3.idComprador,
+              createdAt: DateTime.parse(id3.createdAt),
+              updatedAt: DateTime.parse(id3.updatedAt)),
+          createdAt: DateTime.parse(id2.createdAt),
+          updatedAt: DateTime.parse(id2.updatedAt),
+          idCompra: id2.idCompra,
+          nomeCompra: id2.nomeCompra,
+          localDeCompra: ModelLocalizacao(
+            nome: id4.nome,
+            idLocal: id4.idLocal,
+            createdAt: DateTime.parse(id4.createdAt),
+            updatedAt: DateTime.parse(id4.updatedAt),
+          )),
       idItensCompra: id.idItensCompra,
       quantidadeComprada: id.quantidadeComprada,
       createdAt: DateTime.parse(id.createdAt),
@@ -45,7 +99,7 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future<List<ModelItensCompra>> getAllItensCompra() async {
-    String sqlString = "select * from itenscompras;";
+    String sqlString = "select * from itensCompras;";
     List<ItensCompra> aux = [];
     try {
       await customSelect(sqlString, readsFrom: {db.itensCompras})
@@ -64,6 +118,9 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
     List<ModelItensCompra> modelItensComprados = [];
     Item aux2;
+    Compra id2;
+    Comprador id3;
+    Localizacao id4;
     aux.forEach((value) async {
       sqlString2 =
           "select * from itens where idItem = ${value.itemComprado} LIMIT 1;";
@@ -75,27 +132,80 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
         print(e.toString());
         throw (e.toString());
       }
-
+      try {
+        await customSelect(
+                "select * from compras where idCompra = '${value.compra}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id2 = Compra.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
+      try {
+        await customSelect(
+                "select * from compradores where idComprador = '${id2.comprador}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id3 = Comprador.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
+      try {
+        await customSelect(
+                "select * from localizacoes where idLocal = '${id2.localDeCompra}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id4 = Localizacao.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
       modelItensComprados.add(ModelItensCompra(
-          idItensCompra: value.idItensCompra,
-          compra: value.compra,
-          itemComprado: ModelItem(
-              nome: aux2.nome,
-              idItem: aux2.idItem,
-              preco: aux2.preco,
-              idLocal: aux2.localComprado,
-              createdAt: DateTime.parse(aux2.createdAt),
-              updatedAt: DateTime.parse(aux2.updatedAt)),
-          quantidadeComprada: value.quantidadeComprada,
-          createdAt: DateTime.parse(value.createdAt),
-          updatedAt: DateTime.parse(value.updatedAt)));
+        itemComprado: ModelItem(
+            nome: aux2.nome,
+            idItem: aux2.idItem,
+            preco: aux2.preco,
+            idLocal: ModelLocalizacao(
+              nome: id4.nome,
+              idLocal: id4.idLocal,
+              createdAt: DateTime.parse(id4.createdAt),
+              updatedAt: DateTime.parse(id4.updatedAt),
+            ),
+            createdAt: DateTime.parse(aux2.createdAt),
+            updatedAt: DateTime.parse(aux2.updatedAt)),
+        compra: ModelCompra(
+            comprador: ModelComprador(
+                nome: id3.nome,
+                idComprador: id3.idComprador,
+                createdAt: DateTime.parse(id3.createdAt),
+                updatedAt: DateTime.parse(id3.updatedAt)),
+            createdAt: DateTime.parse(id2.createdAt),
+            updatedAt: DateTime.parse(id2.updatedAt),
+            idCompra: id2.idCompra,
+            nomeCompra: id2.nomeCompra,
+            localDeCompra: ModelLocalizacao(
+              nome: id4.nome,
+              idLocal: id4.idLocal,
+              createdAt: DateTime.parse(id4.createdAt),
+              updatedAt: DateTime.parse(id4.updatedAt),
+            )),
+        idItensCompra: value.idItensCompra,
+        quantidadeComprada: value.quantidadeComprada,
+        createdAt: DateTime.parse(value.createdAt),
+        updatedAt: DateTime.parse(value.updatedAt),
+      ));
     });
     return modelItensComprados;
   }
 
   @override
   Future<ModelItensCompra> getItensCompra(int id) async {
-    String sqlString = "select * from itenscompras where idItensCompra = " +
+    String sqlString = "select * from itensCompras where idItensCompra = " +
         "'$id'"
             "LIMIT 1;";
     ItensCompra aux;
@@ -109,7 +219,42 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       print(e.toString());
       throw (e.toString());
     }
-
+    Compra id2;
+    try {
+      await customSelect(
+              "select * from compras where idCompra = '${aux.compra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Compra.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Comprador id3;
+    try {
+      await customSelect(
+              "select * from compradores where idComprador = '${id2.comprador}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id3 = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Localizacao id4;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${id2.localDeCompra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id4 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
     ModelItensCompra modelItensComprados;
     Item aux2;
     String sqlString2 =
@@ -125,12 +270,32 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
     modelItensComprados = ModelItensCompra(
         idItensCompra: aux.idItensCompra,
-        compra: aux.compra,
+        compra: ModelCompra(
+            comprador: ModelComprador(
+                nome: id3.nome,
+                idComprador: id3.idComprador,
+                createdAt: DateTime.parse(id3.createdAt),
+                updatedAt: DateTime.parse(id3.updatedAt)),
+            createdAt: DateTime.parse(id2.createdAt),
+            updatedAt: DateTime.parse(id2.updatedAt),
+            idCompra: id2.idCompra,
+            nomeCompra: id2.nomeCompra,
+            localDeCompra: ModelLocalizacao(
+              nome: id4.nome,
+              idLocal: id4.idLocal,
+              createdAt: DateTime.parse(id4.createdAt),
+              updatedAt: DateTime.parse(id4.updatedAt),
+            )),
         itemComprado: ModelItem(
             nome: aux2.nome,
             idItem: aux2.idItem,
             preco: aux2.preco,
-            idLocal: aux2.localComprado,
+            idLocal: ModelLocalizacao(
+              nome: id4.nome,
+              idLocal: id4.idLocal,
+              createdAt: DateTime.parse(id4.createdAt),
+              updatedAt: DateTime.parse(id4.updatedAt),
+            ),
             createdAt: DateTime.parse(aux2.createdAt),
             updatedAt: DateTime.parse(aux2.updatedAt)),
         quantidadeComprada: aux.quantidadeComprada,
@@ -141,12 +306,12 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future put(int id, ModelItensCompra novoItensCompra) async {
-    String sqlString = "UPDATE itenscompras SET " +
-        "idItensCompra = '${novoItensCompra.idItensCompra}'"
-            "compra = '${novoItensCompra.compra}'" +
-        "QuantidadeComprada = '${novoItensCompra.quantidadeComprada}'" +
-        "itemComprado = '${novoItensCompra.itemComprado.idItem}'" +
-        "updatedAt = '${DateTime.now()}'" +
+    String sqlString = "UPDATE itensCompras SET " +
+        "idItensCompra = '${novoItensCompra.idItensCompra}', "
+            "compra = '${novoItensCompra.compra.idCompra}', " +
+        "QuantidadeComprada = '${novoItensCompra.quantidadeComprada}', " +
+        "itemComprado = '${novoItensCompra.itemComprado.idItem}', " +
+        "updatedAt = '${DateTime.now()}', " +
         "WHERE idLocal = " +
         "'$id'"
             ";";
@@ -164,7 +329,7 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future remove(int id) async {
     String sqlString =
-        "delete from itens where idItensCompra = " + "'$id'" + ";";
+        "delete from itensCompras where idItensCompra = " + "'$id'" + ";";
     int i;
     try {
       i = await customUpdate(sqlString,
@@ -179,7 +344,7 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future<List<ModelItensCompra>> getItensCompraByCompra(int idCompra) async {
     String sqlString =
-        "select * from itenscompras where idCompra = " + "'$idCompra';";
+        "select * from itensCompras where idCompra = " + "'$idCompra';";
     List<ItensCompra> aux = [];
     try {
       await customSelect(sqlString, readsFrom: {db.itensCompras})
@@ -198,6 +363,9 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
     List<ModelItensCompra> modelItensComprados = [];
     Item aux2;
+    Compra id2;
+    Comprador id3;
+    Localizacao id4;
     aux.forEach((value) async {
       sqlString2 =
           "select * from itens where idItem = ${value.itemComprado} LIMIT 1;";
@@ -210,14 +378,67 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
         throw (e.toString());
       }
 
+      try {
+        await customSelect(
+                "select * from compras where idCompra = '${value.compra}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id2 = Compra.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
+      try {
+        await customSelect(
+                "select * from compradores where idComprador = '${id2.comprador}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id3 = Comprador.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
+      try {
+        await customSelect(
+                "select * from localizacoes where idLocal = '${id2.localDeCompra}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id4 = Localizacao.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
       modelItensComprados.add(ModelItensCompra(
           idItensCompra: value.idItensCompra,
-          compra: value.compra,
+          compra: ModelCompra(
+              comprador: ModelComprador(
+                  nome: id3.nome,
+                  idComprador: id3.idComprador,
+                  createdAt: DateTime.parse(id3.createdAt),
+                  updatedAt: DateTime.parse(id3.updatedAt)),
+              createdAt: DateTime.parse(id2.createdAt),
+              updatedAt: DateTime.parse(id2.updatedAt),
+              idCompra: id2.idCompra,
+              nomeCompra: id2.nomeCompra,
+              localDeCompra: ModelLocalizacao(
+                nome: id4.nome,
+                idLocal: id4.idLocal,
+                createdAt: DateTime.parse(id4.createdAt),
+                updatedAt: DateTime.parse(id4.updatedAt),
+              )),
           itemComprado: ModelItem(
               nome: aux2.nome,
               idItem: aux2.idItem,
               preco: aux2.preco,
-              idLocal: aux2.localComprado,
+              idLocal: ModelLocalizacao(
+                nome: id4.nome,
+                idLocal: id4.idLocal,
+                createdAt: DateTime.parse(id4.createdAt),
+                updatedAt: DateTime.parse(id4.updatedAt),
+              ),
               createdAt: DateTime.parse(aux2.createdAt),
               updatedAt: DateTime.parse(aux2.updatedAt)),
           quantidadeComprada: value.quantidadeComprada,

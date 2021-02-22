@@ -1,6 +1,8 @@
+import 'package:CoinWatcher/app/models/localizacao.dart';
+
 class ModelItem {
   int idItem;
-  int idLocal;
+  ModelLocalizacao idLocal;
   double preco;
   String nome;
   DateTime createdAt;

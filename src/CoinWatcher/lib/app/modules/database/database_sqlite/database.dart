@@ -24,6 +24,6 @@ class CoinWatcherDb extends _$CoinWatcherDb {
   @override
   // TODO: implement migration
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (db) async {
-        await customStatement("PRAGMA foreign_keys = ON");
+        // await customStatement("PRAGMA foreign_keys = ON");
       });
 }

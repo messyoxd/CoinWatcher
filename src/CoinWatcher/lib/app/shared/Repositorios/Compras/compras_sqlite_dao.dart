@@ -1,4 +1,6 @@
+import 'package:CoinWatcher/app/models/comprador.dart';
 import 'package:CoinWatcher/app/models/compras.dart';
+import 'package:CoinWatcher/app/models/localizacao.dart';
 import 'package:CoinWatcher/app/modules/database/database_sqlite/database.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/ICompras.dart';
 import 'package:moor_flutter/moor_flutter.dart';
@@ -12,23 +14,68 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future addCompra(ModelCompra novaCompra) async {
+    var createdAt = DateTime.now();
     String sqlString =
         "insert into compras (localDeCompra, comprador, nomeCompra, createdAt, updatedAt) values " +
-            "('${novaCompra.localDeCompra}', '${novaCompra.comprador}', '${novaCompra.nomeCompra}', '${DateTime.now()}', '${DateTime.now()}')" +
+            "('${novaCompra.localDeCompra.idLocal}', '${novaCompra.comprador.idComprador}', '${novaCompra.nomeCompra}', '$createdAt', '${DateTime.now()}')" +
             ";";
-    int sucesso;
+    Compra id;
     try {
-      sucesso = await customInsert(sqlString);
+      await customInsert(sqlString);
+      await customSelect(
+              "select * from compras where createdAt = '$createdAt' LIMIT 1;")
+          .get()
+          .then((row) {
+        id = Compra.fromData(row.first.data, db);
+      });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    return sucesso;
+    Localizacao id2;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${id.localDeCompra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Comprador id3;
+    try {
+      await customSelect(
+              "select * from compradores where idComprador = '${id.comprador}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id3 = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    return ModelCompra(
+        idCompra: id.idCompra,
+        localDeCompra: ModelLocalizacao(
+            nome: id2.nome,
+            idLocal: id2.idLocal,
+            createdAt: DateTime.parse(id2.createdAt),
+            updatedAt: DateTime.parse(id2.updatedAt)),
+        comprador: ModelComprador(
+            nome: id3.nome,
+            idComprador: id3.idComprador,
+            createdAt: DateTime.parse(id3.createdAt),
+            updatedAt: DateTime.parse(id3.updatedAt)),
+        nomeCompra: id.nomeCompra,
+        createdAt: DateTime.parse(id.createdAt),
+        updatedAt: DateTime.parse(id.updatedAt));
   }
 
   @override
   Future remove(int id) async {
-    String sqlString = "delete from compras where idCompra = " + "'$id'" + ";";
+    String sqlString = "delete from compras where idCompra = " + "$id" + ";";
     int i;
     try {
       i = await customUpdate(sqlString,
@@ -56,15 +103,47 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
     }
 
     List<ModelCompra> modelCompradores = [];
-    aux.forEach((value) {
+    Localizacao id2;
+    Comprador id3;
+    for (var i = 0; i < aux.length; i++) {
+      try {
+        await customSelect(
+                "select * from localizacoes where idLocal = '${aux[i].localDeCompra}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id2 = Localizacao.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
+      try {
+        await customSelect(
+                "select * from compradores where idComprador = '${aux[i].comprador}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id3 = Comprador.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
       modelCompradores.add(ModelCompra(
-          idCompra: value.idCompra,
-          localDeCompra: value.localDeCompra,
-          comprador: value.comprador,
-          nomeCompra: value.nomeCompra,
-          createdAt: DateTime.parse(value.createdAt),
-          updatedAt: DateTime.parse(value.updatedAt)));
-    });
+          idCompra: aux[i].idCompra,
+          localDeCompra: ModelLocalizacao(
+              nome: id2.nome,
+              idLocal: id2.idLocal,
+              createdAt: DateTime.parse(id2.createdAt),
+              updatedAt: DateTime.parse(id2.updatedAt)),
+          comprador: ModelComprador(
+              nome: id3.nome,
+              idComprador: id3.idComprador,
+              createdAt: DateTime.parse(id3.createdAt),
+              updatedAt: DateTime.parse(id3.updatedAt)),
+          nomeCompra: aux[i].nomeCompra,
+          createdAt: DateTime.parse(aux[i].createdAt),
+          updatedAt: DateTime.parse(aux[i].updatedAt)));
+    }
     return modelCompradores;
   }
 
@@ -82,11 +161,43 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       print(e.toString());
       throw (e.toString());
     }
+    Localizacao id2;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${aux.localDeCompra}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Comprador id3;
+    try {
+      await customSelect(
+              "select * from compradores where idComprador = '${aux.comprador}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id3 = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
 
     return ModelCompra(
       idCompra: aux.idCompra,
-      localDeCompra: aux.localDeCompra,
-      comprador: aux.comprador,
+      localDeCompra: ModelLocalizacao(
+          nome: id2.nome,
+          idLocal: id2.idLocal,
+          createdAt: DateTime.parse(id2.createdAt),
+          updatedAt: DateTime.parse(id2.updatedAt)),
+      comprador: ModelComprador(
+          nome: id3.nome,
+          idComprador: id3.idComprador,
+          createdAt: DateTime.parse(id3.createdAt),
+          updatedAt: DateTime.parse(id3.updatedAt)),
       nomeCompra: aux.nomeCompra,
       createdAt: DateTime.parse(aux.createdAt),
       updatedAt: DateTime.parse(aux.updatedAt),
@@ -96,12 +207,12 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future put(int id, ModelCompra novaCompra) async {
     String sqlString = "UPDATE compras SET " +
-        "nomeCompra = '${novaCompra.nomeCompra}'" +
-        "localDeCompra = '${novaCompra.localDeCompra}'" +
-        "comprador = '${novaCompra.comprador}'" +
-        "updatedAt = '${DateTime.now()}'" +
-        "WHERE idComprador = " +
-        "'$id'"
+        "nomeCompra = '${novaCompra.nomeCompra}', " +
+        "localDeCompra = '${novaCompra.localDeCompra.idLocal}', " +
+        "comprador = '${novaCompra.comprador.idComprador}', " +
+        "updatedAt = '${DateTime.now()}' " +
+        "WHERE idCompra = " +
+        "$id"
             ";";
     int sucesso;
     try {
@@ -112,5 +223,46 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       throw (e.toString());
     }
     return sucesso;
+  }
+
+  @override
+  Future<double> calcularCustoTotal(int id) async {
+    String sqlString =
+        "select itemComprado, SUM(QuantidadeComprada*preco) as custoTotal from itensCompras, Itens " +
+            "GROUP BY itemComprado HAVING Itens.idItem = itensCompras.itemComprado AND itensCompras.compra = $id ORDER BY custoTotal DESC;";
+    String sqlString2 =
+        "select itemComprado, QuantidadeComprada, preco, SUM(QuantidadeComprada*preco) as custoTotal from itensCompras, Itens where Itens.idItem = itensCompras.itemComprado AND itensCompras.compra = $id ORDER BY custoTotal DESC;";
+
+    var res = List<Map<String, dynamic>>();
+    try {
+      await customSelect(sqlString2, readsFrom: {db.compras}).get().then((row) {
+        res.add(row.first.data);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    var valor = res.first["custoTotal"];
+    return valor as double;
+  }
+
+  @override
+  Future<int> calcularQuantosItensLocal(int id) async {
+    String sqlString =
+        "select Count(idItem) as quantidadeItens from Itens " +
+        "where Itens.localComprado IN "+
+        "(Select idLocal from localizacoes where localizacoes.idLocal = $id);";
+
+    var res = List<Map<String, dynamic>>();
+    try {
+      await customSelect(sqlString, readsFrom: {db.compras}).get().then((row) {
+        res.add(row.first.data);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    var valor = res.first["quantidadeItens"];
+    return valor;
   }
 }

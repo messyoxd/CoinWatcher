@@ -9,7 +9,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import './compras_page.dart';
 import 'package:adobe_xd/page_link.dart';
-import './compras_add2.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 Function isEmptyValidation = (value) {
@@ -119,6 +118,9 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
                         int.parse(quantidadeCompradaController.text));
                 var controllerCompra = Modular.get<ComprasController>();
                 controllerCompra.addItemToList(itemNovo);
+                itemNomeController.text = "";
+                custoItemController.text = "";
+                quantidadeCompradaController.text = "";
               },
               color: Color(0xfff38282),
               child: Text(
@@ -141,26 +143,31 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
                     child: ListView.builder(
                       itemCount: controllerCompra.itensCompra.length,
                       itemBuilder: (_, int index) {
-                        return SizedBox(
-                          width: 70.0,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Container(
-                              width: 287.0,
-                              height: 43.0,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffffffff),
-                                border: Border.all(
-                                    width: 1.0, color: const Color(0xff707070)),
-                              ),
-                              child: ListTile(
-                                title: Text(controllerCompra
-                                    .itensCompra[index].itemComprado.nome),
-                                trailing: TextButton(
-                                  child: Icon(Icons.delete_forever),
-                                  onPressed: () {
-                                    controllerCompra.removeItemFromList(index);
-                                  },
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 70.0,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Container(
+                                width: 287.0,
+                                height: 43.0,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffffffff),
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xff707070)),
+                                ),
+                                child: ListTile(
+                                  title: Text(controllerCompra
+                                      .itensCompra[index].itemComprado.nome),
+                                  trailing: TextButton(
+                                    child: Icon(Icons.delete_forever),
+                                    onPressed: () {
+                                      controllerCompra
+                                          .removeItemFromList(index);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -174,23 +181,37 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
               },
             ),
             Center(
-              child: FlatButton(
-                color: Color(0xfff38282),
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(19.0),
-                ),
-                child: Text(
-                  'Terminar',
-                  style: TextStyle(
-                    fontFamily: 'Leelawadee UI',
-                    fontSize: 26,
-                    color: const Color(0xffffffff),
-                    height: 2,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
+              child: Observer(builder: (context) {
+                var controllerCompra = Modular.get<ComprasController>();
+                return controllerCompra.loading
+                    ? CircularProgressIndicator()
+                    : FlatButton(
+                        color: Color(0xfff38282),
+                        onPressed: () async {
+                          var controllerCompra =
+                              Modular.get<ComprasController>();
+                          await controllerCompra.createCompra(
+                              compradorNomeController.text,
+                              compraNomeController.text,
+                              localDaCompraController.text);
+                          controllerCompra.getCompras();
+                          Navigator.pop(context);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(19.0),
+                        ),
+                        child: Text(
+                          'Terminar',
+                          style: TextStyle(
+                            fontFamily: 'Leelawadee UI',
+                            fontSize: 26,
+                            color: const Color(0xffffffff),
+                            height: 2,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      );
+              }),
             )
           ],
         )),
@@ -227,12 +248,8 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
                   ),
                   Row(
                     children: [
-                      FlatButton(
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 6,
                       ),
                       Center(
                         child: Text(

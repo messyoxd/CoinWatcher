@@ -58,7 +58,7 @@ CREATE TABLE ItensCompras (
   itemComprado INT NOT NULL,
   createdAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
   updatedAt VARCHAR DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (idItensCompra, itemComprado),
+  PRIMARY KEY (idItensCompra),
   CONSTRAINT compraId
     FOREIGN KEY (compra)
     REFERENCES Compras (idCompra)

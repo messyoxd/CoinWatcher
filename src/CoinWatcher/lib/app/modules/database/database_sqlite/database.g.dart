@@ -1491,14 +1491,13 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
     this.updatedAt = const Value.absent(),
   });
   ItensComprasCompanion.insert({
-    @required int idItensCompra,
+    this.idItensCompra = const Value.absent(),
     @required int compra,
     @required int quantidadeComprada,
     @required int itemComprado,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : idItensCompra = Value(idItensCompra),
-        compra = Value(compra),
+  })  : compra = Value(compra),
         quantidadeComprada = Value(quantidadeComprada),
         itemComprado = Value(itemComprado);
   static Insertable<ItensCompra> custom({
@@ -1659,8 +1658,6 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
           _idItensCompraMeta,
           idItensCompra.isAcceptableOrUnknown(
               data['idItensCompra'], _idItensCompraMeta));
-    } else if (isInserting) {
-      context.missing(_idItensCompraMeta);
     }
     if (data.containsKey('compra')) {
       context.handle(_compraMeta,
@@ -1696,7 +1693,7 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {idItensCompra, itemComprado};
+  Set<GeneratedColumn> get $primaryKey => {idItensCompra};
   @override
   ItensCompra map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -1710,7 +1707,7 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
 
   @override
   List<String> get customConstraints => const [
-        'PRIMARY KEY (idItensCompra, itemComprado)',
+        'PRIMARY KEY (idItensCompra)',
         'CONSTRAINT compraId\r\n    FOREIGN KEY (compra)\r\n    REFERENCES Compras (idCompra)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION',
         'CONSTRAINT fk_ItensCompra_Item1\r\n    FOREIGN KEY (itemComprado)\r\n    REFERENCES Itens (idItem)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION'
       ];

@@ -1,7 +1,12 @@
+import 'package:CoinWatcher/app/models/localizacao.dart';
+import 'package:CoinWatcher/app/modules/database/database_sqlite/database.dart';
+
+import 'comprador.dart';
+
 class ModelCompra {
   int idCompra;
-  int localDeCompra;
-  int comprador;
+  ModelLocalizacao localDeCompra;
+  ModelComprador comprador;
   String nomeCompra;
   DateTime createdAt;
   DateTime updatedAt;

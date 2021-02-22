@@ -27,7 +27,11 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       print(e.toString());
       throw (e.toString());
     }
-    return id;
+    return ModelComprador(
+          idComprador: id.idComprador,
+          nome: id.nome,
+          createdAt: DateTime.parse(id.createdAt),
+          updatedAt: DateTime.parse(id.updatedAt));
   }
 
   @override
@@ -125,10 +129,10 @@ class CompradoresSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future put(int id, ModelComprador novoComprador) async {
     String sqlString = "UPDATE compradores SET " +
-        "nome = '${novoComprador.nome}'" +
-        "updatedAt = '${DateTime.now()}'" +
+        "nome = '${novoComprador.nome}', " +
+        "updatedAt = '${DateTime.now()}', " +
         "WHERE idComprador = " +
-        "'$id'"
+        "$id"
             ";";
     int sucesso;
     try {

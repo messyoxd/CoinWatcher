@@ -1,4 +1,5 @@
 import 'package:CoinWatcher/app/models/item.dart';
+import 'package:CoinWatcher/app/models/localizacao.dart';
 import 'package:CoinWatcher/app/modules/database/database_sqlite/database.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/IItens.dart';
 import 'package:moor_flutter/moor_flutter.dart';
@@ -15,22 +16,40 @@ class ItensSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
     var createdAt = DateTime.now();
     String sqlString =
         "insert into itens (nome, preco, localComprado, createdAt, updatedAt) values " +
-            "('${novoItem.nome}','${novoItem.preco}','${novoItem.idLocal}', '$createdAt', '${DateTime.now()}')" +
+            "('${novoItem.nome}','${novoItem.preco}','${novoItem.idLocal.idLocal}', '$createdAt', '${DateTime.now()}')" +
             ";";
     Item id;
     try {
       await customInsert(sqlString);
-      await customSelect("select * from itens where createdAt = '$createdAt' LIMIT 1;").get().then((row){
+      await customSelect(
+              "select * from itens where createdAt = '$createdAt' LIMIT 1;")
+          .get()
+          .then((row) {
         id = Item.fromData(row.first.data, db);
       });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-
+    Localizacao id2;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${id.localComprado}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
     return ModelItem(
       idItem: id.idItem,
-      idLocal: id.localComprado,
+      idLocal: ModelLocalizacao(
+          nome: id2.nome,
+          idLocal: id2.idLocal,
+          createdAt: DateTime.parse(id2.createdAt),
+          updatedAt: DateTime.parse(id2.updatedAt)),
       nome: id.nome,
       preco: id.preco,
       createdAt: DateTime.parse(id.createdAt),
@@ -68,10 +87,26 @@ class ItensSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
     }
 
     List<ModelItem> modelItens = [];
-    aux.forEach((value) {
+    Localizacao id2;
+    aux.forEach((value) async {
+      try {
+        await customSelect(
+                "select * from localizacoes where idLocal = '${value.localComprado}' LIMIT 1;")
+            .get()
+            .then((row) {
+          id2 = Localizacao.fromData(row.first.data, db);
+        });
+      } catch (e) {
+        print(e.toString());
+        throw (e.toString());
+      }
       modelItens.add(ModelItem(
           idItem: value.idItem,
-          idLocal: value.localComprado,
+          idLocal: ModelLocalizacao(
+              nome: id2.nome,
+              idLocal: id2.idLocal,
+              createdAt: DateTime.parse(id2.createdAt),
+              updatedAt: DateTime.parse(id2.updatedAt)),
           nome: value.nome,
           preco: value.preco,
           createdAt: DateTime.parse(value.createdAt),
@@ -94,10 +129,25 @@ class ItensSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       print(e.toString());
       throw (e.toString());
     }
-
+    Localizacao id2;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '${aux.localComprado}' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
     return ModelItem(
         idItem: aux.idItem,
-        idLocal: aux.localComprado,
+        idLocal: ModelLocalizacao(
+            nome: id2.nome,
+            idLocal: id2.idLocal,
+            createdAt: DateTime.parse(id2.createdAt),
+            updatedAt: DateTime.parse(id2.updatedAt)),
         nome: aux.nome,
         preco: aux.preco,
         createdAt: DateTime.parse(aux.createdAt),
@@ -107,10 +157,10 @@ class ItensSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future put(int id, ModelItem novoItem) async {
     String sqlString = "UPDATE itens SET " +
-        "idLocal = '${novoItem.idLocal}'"
-        "nome = '${novoItem.nome}'" +
-        "preco = '${novoItem.preco}'" +
-        "localComprado = '${novoItem.idLocal}'" +
+        "idLocal = '${novoItem.idLocal.idLocal}', "
+            "nome = '${novoItem.nome}', " +
+        "preco = '${novoItem.preco}', " +
+        "localComprado = '${novoItem.idLocal}', " +
         "updatedAt = '${DateTime.now()}'" +
         "WHERE idLocal = " +
         "'$id'"

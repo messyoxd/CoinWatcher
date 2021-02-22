@@ -1,3 +1,4 @@
+import 'package:CoinWatcher/app/modules/compras/compras_controller.dart';
 import 'package:CoinWatcher/app/modules/compras/compras_module.dart';
 import 'package:CoinWatcher/app/shared/Repositorios/Compradores/compradores_sqlite_dao.dart';
 import 'package:CoinWatcher/app/shared/Repositorios/Compras/compras_sqlite_dao.dart';
@@ -15,6 +16,7 @@ class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppController()),
+        Bind((i) => ComprasController()),
         Bind((i) => CoinWatcherDb.instance),
         Bind((i) => CompradoresSQLiteDAO(i.get())),
         Bind((i) => ComprasSQLiteDAO(i.get())),

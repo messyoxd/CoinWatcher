@@ -34,6 +34,7 @@ environment:
 
 dependencies:
   dio:
+  intl:
   flutter_mobx: 
   mobx: 
   moor_flutter:
