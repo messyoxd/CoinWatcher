@@ -110,7 +110,9 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
             //       labelText: "buscar por nome da compra"),
             // ),
             Observer(builder: (_) {
-              return Padding(
+              return controller.compras.length > 0
+              ?
+              Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: TextField(
                   controller: busca,
@@ -121,7 +123,9 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                       border: OutlineInputBorder(),
                       labelText: "buscar por nome da compra"),
                 ),
-              );
+              )
+              :
+              Container();
             }),
             Observer(builder: (_) {
               return comprasOuNada();
@@ -335,92 +339,96 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
           );
         }
       } else {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Nenhuma\ncompra...',
-              style: TextStyle(
-                fontFamily: 'Yu Gothic',
-                fontSize: 22,
-                color: const Color(0xff000000),
-                height: 1.0909090909090908,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Stack(
-              children: [
-                SizedBox(
-                  width: 47.0,
-                  height: 53.0,
-                  child: Stack(
-                    children: <Widget>[
-                      Pinned.fromSize(
-                        bounds: Rect.fromLTWH(0.0, 0.0, 47.0, 53.0),
-                        size: Size(47.0, 53.0),
-                        pinLeft: true,
-                        pinRight: true,
-                        pinTop: true,
-                        pinBottom: true,
-                        child: Container(
-                          decoration: BoxDecoration(),
-                        ),
-                      ),
-                      Pinned.fromSize(
-                        bounds: Rect.fromLTWH(2.0, 1.6, 42.6, 47.1),
-                        size: Size(47.0, 53.0),
-                        pinLeft: true,
-                        pinRight: true,
-                        pinTop: true,
-                        pinBottom: true,
-                        child: Stack(
-                          children: <Widget>[
-                            Pinned.fromSize(
-                              bounds: Rect.fromLTWH(0.0, 0.0, 42.6, 47.1),
-                              size: Size(42.6, 47.1),
-                              pinLeft: true,
-                              pinRight: true,
-                              pinTop: true,
-                              pinBottom: true,
-                              child: SvgPicture.string(
-                                _svg_rt6q15,
-                                allowDrawingOutsideViewBox: true,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 1.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Nenhuma\ncompra...',
+                style: TextStyle(
+                  fontFamily: 'Yu Gothic',
+                  fontSize: 22,
+                  color: const Color(0xff000000),
+                  height: 1.0909090909090908,
                 ),
-                Transform.translate(
-                  offset: Offset(50, 0),
-                  child: Transform.rotate(
-                    angle: 0.4363,
-                    child: SizedBox(
-                      width: 5.0,
-                      height: 81.0,
-                      child: Text(
-                        '?',
-                        style: TextStyle(
-                          fontFamily: 'Yu Gothic',
-                          fontSize: 45,
-                          color: const Color(0xff000000),
-                          height: 1.7333333333333334,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Stack(
+                children: [
+                  SizedBox(
+                    width: 47.0,
+                    height: 53.0,
+                    child: Stack(
+                      children: <Widget>[
+                        Pinned.fromSize(
+                          bounds: Rect.fromLTWH(0.0, 0.0, 47.0, 53.0),
+                          size: Size(47.0, 53.0),
+                          pinLeft: true,
+                          pinRight: true,
+                          pinTop: true,
+                          pinBottom: true,
+                          child: Container(
+                            decoration: BoxDecoration(),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
+                        Pinned.fromSize(
+                          bounds: Rect.fromLTWH(2.0, 1.6, 42.6, 47.1),
+                          size: Size(47.0, 53.0),
+                          pinLeft: true,
+                          pinRight: true,
+                          pinTop: true,
+                          pinBottom: true,
+                          child: Stack(
+                            children: <Widget>[
+                              Pinned.fromSize(
+                                bounds: Rect.fromLTWH(0.0, 0.0, 42.6, 47.1),
+                                size: Size(42.6, 47.1),
+                                pinLeft: true,
+                                pinRight: true,
+                                pinTop: true,
+                                pinBottom: true,
+                                child: SvgPicture.string(
+                                  _svg_rt6q15,
+                                  allowDrawingOutsideViewBox: true,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: Offset(50, 0),
+                    child: Transform.rotate(
+                      angle: 0.4363,
+                      child: SizedBox(
+                        width: 5.0,
+                        height: 81.0,
+                        child: Text(
+                          '?',
+                          style: TextStyle(
+                            fontFamily: 'Yu Gothic',
+                            fontSize: 45,
+                            color: const Color(0xff000000),
+                            height: 1.7333333333333334,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
       }
     }
