@@ -568,12 +568,14 @@ class Compra extends DataClass implements Insertable<Compra> {
   final int idCompra;
   final int localDeCompra;
   final int comprador;
+  final String nomeCompra;
   final String createdAt;
   final String updatedAt;
   Compra(
       {@required this.idCompra,
       @required this.localDeCompra,
       @required this.comprador,
+      @required this.nomeCompra,
       this.createdAt,
       this.updatedAt});
   factory Compra.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -588,6 +590,8 @@ class Compra extends DataClass implements Insertable<Compra> {
           .mapFromDatabaseResponse(data['${effectivePrefix}localDeCompra']),
       comprador:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}comprador']),
+      nomeCompra: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}nomeCompra']),
       createdAt: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
       updatedAt: stringType
@@ -605,6 +609,9 @@ class Compra extends DataClass implements Insertable<Compra> {
     }
     if (!nullToAbsent || comprador != null) {
       map['comprador'] = Variable<int>(comprador);
+    }
+    if (!nullToAbsent || nomeCompra != null) {
+      map['nomeCompra'] = Variable<String>(nomeCompra);
     }
     if (!nullToAbsent || createdAt != null) {
       map['createdAt'] = Variable<String>(createdAt);
@@ -626,6 +633,9 @@ class Compra extends DataClass implements Insertable<Compra> {
       comprador: comprador == null && nullToAbsent
           ? const Value.absent()
           : Value(comprador),
+      nomeCompra: nomeCompra == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nomeCompra),
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
@@ -642,6 +652,7 @@ class Compra extends DataClass implements Insertable<Compra> {
       idCompra: serializer.fromJson<int>(json['idCompra']),
       localDeCompra: serializer.fromJson<int>(json['localDeCompra']),
       comprador: serializer.fromJson<int>(json['comprador']),
+      nomeCompra: serializer.fromJson<String>(json['nomeCompra']),
       createdAt: serializer.fromJson<String>(json['createdAt']),
       updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
@@ -653,6 +664,7 @@ class Compra extends DataClass implements Insertable<Compra> {
       'idCompra': serializer.toJson<int>(idCompra),
       'localDeCompra': serializer.toJson<int>(localDeCompra),
       'comprador': serializer.toJson<int>(comprador),
+      'nomeCompra': serializer.toJson<String>(nomeCompra),
       'createdAt': serializer.toJson<String>(createdAt),
       'updatedAt': serializer.toJson<String>(updatedAt),
     };
@@ -662,12 +674,14 @@ class Compra extends DataClass implements Insertable<Compra> {
           {int idCompra,
           int localDeCompra,
           int comprador,
+          String nomeCompra,
           String createdAt,
           String updatedAt}) =>
       Compra(
         idCompra: idCompra ?? this.idCompra,
         localDeCompra: localDeCompra ?? this.localDeCompra,
         comprador: comprador ?? this.comprador,
+        nomeCompra: nomeCompra ?? this.nomeCompra,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
@@ -677,6 +691,7 @@ class Compra extends DataClass implements Insertable<Compra> {
           ..write('idCompra: $idCompra, ')
           ..write('localDeCompra: $localDeCompra, ')
           ..write('comprador: $comprador, ')
+          ..write('nomeCompra: $nomeCompra, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -688,8 +703,10 @@ class Compra extends DataClass implements Insertable<Compra> {
       idCompra.hashCode,
       $mrjc(
           localDeCompra.hashCode,
-          $mrjc(comprador.hashCode,
-              $mrjc(createdAt.hashCode, updatedAt.hashCode)))));
+          $mrjc(
+              comprador.hashCode,
+              $mrjc(nomeCompra.hashCode,
+                  $mrjc(createdAt.hashCode, updatedAt.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -697,6 +714,7 @@ class Compra extends DataClass implements Insertable<Compra> {
           other.idCompra == this.idCompra &&
           other.localDeCompra == this.localDeCompra &&
           other.comprador == this.comprador &&
+          other.nomeCompra == this.nomeCompra &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -705,12 +723,14 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
   final Value<int> idCompra;
   final Value<int> localDeCompra;
   final Value<int> comprador;
+  final Value<String> nomeCompra;
   final Value<String> createdAt;
   final Value<String> updatedAt;
   const ComprasCompanion({
     this.idCompra = const Value.absent(),
     this.localDeCompra = const Value.absent(),
     this.comprador = const Value.absent(),
+    this.nomeCompra = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -718,14 +738,17 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
     this.idCompra = const Value.absent(),
     @required int localDeCompra,
     @required int comprador,
+    @required String nomeCompra,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   })  : localDeCompra = Value(localDeCompra),
-        comprador = Value(comprador);
+        comprador = Value(comprador),
+        nomeCompra = Value(nomeCompra);
   static Insertable<Compra> custom({
     Expression<int> idCompra,
     Expression<int> localDeCompra,
     Expression<int> comprador,
+    Expression<String> nomeCompra,
     Expression<String> createdAt,
     Expression<String> updatedAt,
   }) {
@@ -733,6 +756,7 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
       if (idCompra != null) 'idCompra': idCompra,
       if (localDeCompra != null) 'localDeCompra': localDeCompra,
       if (comprador != null) 'comprador': comprador,
+      if (nomeCompra != null) 'nomeCompra': nomeCompra,
       if (createdAt != null) 'createdAt': createdAt,
       if (updatedAt != null) 'updatedAt': updatedAt,
     });
@@ -742,12 +766,14 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
       {Value<int> idCompra,
       Value<int> localDeCompra,
       Value<int> comprador,
+      Value<String> nomeCompra,
       Value<String> createdAt,
       Value<String> updatedAt}) {
     return ComprasCompanion(
       idCompra: idCompra ?? this.idCompra,
       localDeCompra: localDeCompra ?? this.localDeCompra,
       comprador: comprador ?? this.comprador,
+      nomeCompra: nomeCompra ?? this.nomeCompra,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -765,6 +791,9 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
     if (comprador.present) {
       map['comprador'] = Variable<int>(comprador.value);
     }
+    if (nomeCompra.present) {
+      map['nomeCompra'] = Variable<String>(nomeCompra.value);
+    }
     if (createdAt.present) {
       map['createdAt'] = Variable<String>(createdAt.value);
     }
@@ -780,6 +809,7 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
           ..write('idCompra: $idCompra, ')
           ..write('localDeCompra: $localDeCompra, ')
           ..write('comprador: $comprador, ')
+          ..write('nomeCompra: $nomeCompra, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -817,6 +847,14 @@ class Compras extends Table with TableInfo<Compras, Compra> {
         $customConstraints: 'NOT NULL');
   }
 
+  final VerificationMeta _nomeCompraMeta = const VerificationMeta('nomeCompra');
+  GeneratedTextColumn _nomeCompra;
+  GeneratedTextColumn get nomeCompra => _nomeCompra ??= _constructNomeCompra();
+  GeneratedTextColumn _constructNomeCompra() {
+    return GeneratedTextColumn('nomeCompra', $tableName, false,
+        $customConstraints: 'NOT NULL');
+  }
+
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   GeneratedTextColumn _createdAt;
   GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
@@ -837,7 +875,7 @@ class Compras extends Table with TableInfo<Compras, Compra> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [idCompra, localDeCompra, comprador, createdAt, updatedAt];
+      [idCompra, localDeCompra, comprador, nomeCompra, createdAt, updatedAt];
   @override
   Compras get asDslTable => this;
   @override
@@ -866,6 +904,14 @@ class Compras extends Table with TableInfo<Compras, Compra> {
           comprador.isAcceptableOrUnknown(data['comprador'], _compradorMeta));
     } else if (isInserting) {
       context.missing(_compradorMeta);
+    }
+    if (data.containsKey('nomeCompra')) {
+      context.handle(
+          _nomeCompraMeta,
+          nomeCompra.isAcceptableOrUnknown(
+              data['nomeCompra'], _nomeCompraMeta));
+    } else if (isInserting) {
+      context.missing(_nomeCompraMeta);
     }
     if (data.containsKey('createdAt')) {
       context.handle(_createdAtMeta,
@@ -1445,14 +1491,13 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
     this.updatedAt = const Value.absent(),
   });
   ItensComprasCompanion.insert({
-    @required int idItensCompra,
+    this.idItensCompra = const Value.absent(),
     @required int compra,
     @required int quantidadeComprada,
     @required int itemComprado,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : idItensCompra = Value(idItensCompra),
-        compra = Value(compra),
+  })  : compra = Value(compra),
         quantidadeComprada = Value(quantidadeComprada),
         itemComprado = Value(itemComprado);
   static Insertable<ItensCompra> custom({
@@ -1613,8 +1658,6 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
           _idItensCompraMeta,
           idItensCompra.isAcceptableOrUnknown(
               data['idItensCompra'], _idItensCompraMeta));
-    } else if (isInserting) {
-      context.missing(_idItensCompraMeta);
     }
     if (data.containsKey('compra')) {
       context.handle(_compraMeta,
@@ -1650,7 +1693,7 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {idItensCompra, itemComprado};
+  Set<GeneratedColumn> get $primaryKey => {idItensCompra};
   @override
   ItensCompra map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -1664,7 +1707,7 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
 
   @override
   List<String> get customConstraints => const [
-        'PRIMARY KEY (idItensCompra, itemComprado)',
+        'PRIMARY KEY (idItensCompra)',
         'CONSTRAINT compraId\r\n    FOREIGN KEY (compra)\r\n    REFERENCES Compras (idCompra)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION',
         'CONSTRAINT fk_ItensCompra_Item1\r\n    FOREIGN KEY (itemComprado)\r\n    REFERENCES Itens (idItem)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION'
       ];
@@ -1693,6 +1736,12 @@ abstract class _$CoinWatcherDb extends GeneratedDatabase {
   LocalizacoesSQLiteDAO _localizacoesSQLiteDAO;
   LocalizacoesSQLiteDAO get localizacoesSQLiteDAO =>
       _localizacoesSQLiteDAO ??= LocalizacoesSQLiteDAO(this as CoinWatcherDb);
+  ComprasSQLiteDAO _comprasSQLiteDAO;
+  ComprasSQLiteDAO get comprasSQLiteDAO =>
+      _comprasSQLiteDAO ??= ComprasSQLiteDAO(this as CoinWatcherDb);
+  ItensCompraSQLiteDAO _itensCompraSQLiteDAO;
+  ItensCompraSQLiteDAO get itensCompraSQLiteDAO =>
+      _itensCompraSQLiteDAO ??= ItensCompraSQLiteDAO(this as CoinWatcherDb);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

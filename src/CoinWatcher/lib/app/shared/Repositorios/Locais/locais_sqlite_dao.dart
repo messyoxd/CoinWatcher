@@ -12,18 +12,29 @@ class LocalizacoesSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   LocalizacoesSQLiteDAO(CoinWatcherDb db) : super(db);
   @override
   Future addLocal(ModelLocalizacao novoLocal) async {
+    var createdAt = DateTime.now();
     String sqlString =
         "insert into localizacoes (nome, createdAt, updatedAt) values " +
-            "('${novoLocal.nome}', '${DateTime.now()}', '${DateTime.now()}')" +
+            "('${novoLocal.nome}', '$createdAt', '${DateTime.now()}')" +
             ";";
-    int sucesso;
+    Localizacao id;
     try {
-      sucesso = await customInsert(sqlString);
+      await customInsert(sqlString);
+      await customSelect(
+              "select * from localizacoes where createdAt = '$createdAt' LIMIT 1;")
+          .get()
+          .then((row) {
+        id = Localizacao.fromData(row.first.data, db);
+      });
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    return sucesso;
+    return ModelLocalizacao(
+        idLocal: id.idLocal,
+        nome: id.nome,
+        createdAt: DateTime.parse(id.createdAt),
+        updatedAt: DateTime.parse(id.updatedAt));
   }
 
   @override
@@ -97,8 +108,8 @@ class LocalizacoesSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future put(int id, ModelLocalizacao novoLocal) async {
     String sqlString = "UPDATE localizacoes SET " +
-        "nome = '${novoLocal.nome}'" +
-        "updatedAt = '${DateTime.now()}'" +
+        "nome = '${novoLocal.nome}', " +
+        "updatedAt = '${DateTime.now()}', " +
         "WHERE idLocal = " +
         "'$id'"
             ";";
@@ -111,5 +122,30 @@ class LocalizacoesSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
       throw (e.toString());
     }
     return sucesso;
+  }
+
+  @override
+  Future<ModelLocalizacao> getLocalByName(String name) async {
+    String sqlString = "select * from localizacoes where nome = " +
+        "'$name'"
+            "LIMIT 1;";
+    Localizacao aux;
+    try {
+      await customSelect(sqlString, readsFrom: {db.localizacoes})
+          .get()
+          .then((row) {
+        aux = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+
+    return ModelLocalizacao(
+      idLocal: aux.idLocal,
+      nome: aux.nome,
+      createdAt: DateTime.parse(aux.createdAt),
+      updatedAt: DateTime.parse(aux.updatedAt),
+    );
   }
 }
