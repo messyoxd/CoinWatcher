@@ -74,7 +74,11 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
                           widget.controller.detalhesCompra.nomeCompra,
                           style: TextStyle(
                             fontFamily: 'Yu Gothic',
-                            fontSize: widget.controller.detalhesCompra.nomeCompra.length > 10 ? 20 : 35,
+                            fontSize: widget.controller.detalhesCompra
+                                        .nomeCompra.length >
+                                    10
+                                ? 20
+                                : 35,
                             color: const Color(0xffffffff),
                             height: 1.21875,
                           ),
@@ -89,161 +93,164 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Observer(
-            builder: (BuildContext context) {
-              return widget.controller.loading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Card(
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: FlatButton(
-                                    color: Color(0xfff38282),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, "/compra-editar");
-                                    },
-                                    child: Icon(Icons.edit),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Observer(
+              builder: (BuildContext context) {
+                return widget.controller.loading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Card(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: FlatButton(
+                                      color: Color(0xfff38282),
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, "/compra-editar");
+                                      },
+                                      child: Icon(Icons.edit),
+                                    ),
                                   ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.controller.detalhesCompra
+                                            .comprador.nome,
+                                        style: TextStyle(
+                                          fontFamily: 'Leelawadee UI',
+                                          fontSize: widget
+                                                      .controller
+                                                      .detalhesCompra
+                                                      .comprador
+                                                      .nome
+                                                      .length >
+                                                  10
+                                              ? 20
+                                              : 35,
+                                          color: const Color(0xfff38282),
+                                          height: 1.7878787878787878,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        widget.controller.detalhesCompra
+                                            .localDeCompra.nome,
+                                        style: TextStyle(
+                                          fontFamily: 'Leelawadee UI',
+                                          fontSize: widget
+                                                      .controller
+                                                      .detalhesCompra
+                                                      .localDeCompra
+                                                      .nome
+                                                      .length >
+                                                  10
+                                              ? 12
+                                              : 20,
+                                          color: const Color(0xfff38282),
+                                          height: 1.7878787878787878,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        "Custo Total: ${widget.controller.custoTotal}",
+                                        style: TextStyle(
+                                          fontFamily: 'Leelawadee UI',
+                                          fontSize: 20,
+                                          color: const Color(0xfff38282),
+                                          height: 1.7878787878787878,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        "Itens já comprados nesse local: ${widget.controller.itensPorLocal}",
+                                        style: TextStyle(
+                                          fontFamily: 'Leelawadee UI',
+                                          fontSize: 15,
+                                          color: const Color(0xfff38282),
+                                          height: 1.7878787878787878,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      Text(
+                                        DateFormat('yyyy-MM-dd HH:mm').format(
+                                            widget.controller.detalhesCompra
+                                                .createdAt),
+                                        style: TextStyle(
+                                          fontFamily: 'Leelawadee UI',
+                                          fontSize: 20,
+                                          color: const Color(0xfff38282),
+                                          height: 1.7878787878787878,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+              },
+            ),
+            Observer(builder: (_) {
+              if (widget.controller.itensCompra.length > 0) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 2.5,
+                  child: ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    itemCount: widget.controller.itensCompra.length,
+                    itemBuilder: (_, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 70.0,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Container(
+                              width: 287.0,
+                              height: 43.0,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffffffff),
+                                border: Border.all(
+                                    width: 1.0, color: const Color(0xff707070)),
+                              ),
+                              child: ListTile(
+                                title: Text(widget.controller.itensCompra[index]
+                                    .itemComprado.nome),
+                                trailing: TextButton(
+                                  child: Icon(Icons.delete_forever),
+                                  onPressed: () {
+                                    widget.controller.removeItemFromCompra(
+                                        widget.controller.itensCompra[index]
+                                            .itemComprado.idItem,
+                                        index,
+                                        context);
+                                  },
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.controller.detalhesCompra.comprador
-                                          .nome,
-                                      style: TextStyle(
-                                        fontFamily: 'Leelawadee UI',
-                                        fontSize: widget.controller.detalhesCompra.comprador.nome.length > 10 ? 20 : 35,
-                                        color: const Color(0xfff38282),
-                                        height: 1.7878787878787878,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      widget.controller.detalhesCompra
-                                          .localDeCompra.nome,
-                                      style: TextStyle(
-                                        fontFamily: 'Leelawadee UI',
-                                        fontSize: widget.controller.detalhesCompra.localDeCompra.nome.length > 10 ? 12 : 20,
-                                        color: const Color(0xfff38282),
-                                        height: 1.7878787878787878,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      "Custo Total: ${widget.controller.custoTotal}",
-                                      style: TextStyle(
-                                        fontFamily: 'Leelawadee UI',
-                                        fontSize: 20,
-                                        color: const Color(0xfff38282),
-                                        height: 1.7878787878787878,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      "Itens já comprados nesse local: ${widget.controller.itensPorLocal}",
-                                      style: TextStyle(
-                                        fontFamily: 'Leelawadee UI',
-                                        fontSize: 15,
-                                        color: const Color(0xfff38282),
-                                        height: 1.7878787878787878,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      DateFormat('yyyy-MM-dd HH:mm').format(
-                                          widget.controller.detalhesCompra
-                                              .createdAt),
-                                      style: TextStyle(
-                                        fontFamily: 'Leelawadee UI',
-                                        fontSize: 20,
-                                        color: const Color(0xfff38282),
-                                        height: 1.7878787878787878,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Observer(builder: (_) {
-                                      if (widget.controller.itensCompra.length >
-                                          0) {
-                                        return SizedBox(
-                                          height: 150,
-                                          child: ListView.builder(
-                                            itemCount: widget
-                                                .controller.itensCompra.length,
-                                            itemBuilder: (_, int index) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: SizedBox(
-                                                  width: 70.0,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10, right: 10),
-                                                    child: Container(
-                                                      width: 287.0,
-                                                      height: 43.0,
-                                                      decoration: BoxDecoration(
-                                                        color: const Color(
-                                                            0xffffffff),
-                                                        border: Border.all(
-                                                            width: 1.0,
-                                                            color: const Color(
-                                                                0xff707070)),
-                                                      ),
-                                                      child: ListTile(
-                                                        title: Text(widget
-                                                            .controller
-                                                            .itensCompra[index]
-                                                            .itemComprado
-                                                            .nome),
-                                                        trailing: TextButton(
-                                                          child: Icon(Icons
-                                                              .delete_forever),
-                                                          onPressed: () {
-                                                            widget.controller.removeItemFromCompra(
-                                                                widget
-                                                                    .controller
-                                                                    .itensCompra[
-                                                                        index]
-                                                                    .itemComprado
-                                                                    .idItem,
-                                                                index,
-                                                                context);
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      }
-                                      return Container();
-                                    }),
-                                  ],
-                                ),
-                              ],
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                    );
-            },
-          )
-        ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+              return Container();
+            }),
+          ],
+        ),
       ),
       // floatingActionButton: FloatingActionButton(
       //   backgroundColor: const Color(0xffffffff),

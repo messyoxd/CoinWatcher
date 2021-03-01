@@ -224,6 +224,7 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
     void initState() {
       // TODO: implement initState
       super.initState();
+      controller.itensCompra.clear();
       compraNomeController.text = "";
       compradorNomeController.text = "";
       localDaCompraController.text = "";
