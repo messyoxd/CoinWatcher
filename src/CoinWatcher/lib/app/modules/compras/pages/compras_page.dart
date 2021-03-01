@@ -4,8 +4,6 @@ import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import '../compras_controller.dart';
-import './compras_add.dart';
-import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -111,21 +109,19 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
             // ),
             Observer(builder: (_) {
               return controller.compras.length > 0
-              ?
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
-                  controller: busca,
-                  onChanged: (value) {
-                    controller.buscar(value);
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "buscar por nome da compra"),
-                ),
-              )
-              :
-              Container();
+                  ? Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: TextField(
+                        controller: busca,
+                        onChanged: (value) {
+                          controller.buscar(value);
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "buscar por nome da compra"),
+                      ),
+                    )
+                  : Container();
             }),
             Observer(builder: (_) {
               return comprasOuNada();
@@ -160,7 +156,7 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                         child: FlatButton(
                           color: Color(0xfff38282),
                           onPressed: () {
-                            controller.removeCompra(index);
+                            controller.removeCompra(index, context);
                           },
                           child: Icon(Icons.delete_forever),
                         ),
@@ -168,7 +164,8 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                       FlatButton(
                         onPressed: () {
                           controller.detalhesCompra = controller.compras[index];
-                          Navigator.pushNamed(context, '/compra-detalhes');
+                          Navigator.pushNamed(context, '/compra-detalhes',
+                              arguments: controller);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +252,7 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                         child: FlatButton(
                           color: Color(0xfff38282),
                           onPressed: () {
-                            controller.removeCompra(index);
+                            controller.removeCompra(index, context);
                           },
                           child: Icon(Icons.delete_forever),
                         ),

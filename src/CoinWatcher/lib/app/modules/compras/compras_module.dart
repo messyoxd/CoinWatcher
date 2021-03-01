@@ -11,13 +11,14 @@ import 'compras_page.dart';
 class ComprasModule extends ChildModule {
   @override
   List<Bind> get binds => [
+        $ComprasController
       ];
 
   @override
   List<ModularRouter> get routers => [
         ModularRouter(Modular.initialRoute, child: (_, args) => Compras()),
-        ModularRouter('/adicionar-compra', child: (_, args) => ComprasAdd()),
-        ModularRouter('/compra-detalhes', child: (_, args) => ComprasDetalhes()),
+        ModularRouter('/adicionar-compra', child: (_, args) => ComprasAdd(controller: args.data,)),
+        ModularRouter('/compra-detalhes', child: (_, args) => ComprasDetalhes(controller: args.data,)),
         ModularRouter('/compra-editar', child: (_, args) => ComprasEditar()),
       ];
 

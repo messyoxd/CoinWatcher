@@ -26,8 +26,10 @@ var quantidadeCompradaController = TextEditingController();
 var custoItemController = TextEditingController();
 
 class ComprasAdd extends StatefulWidget {
+  ComprasController controller;
   ComprasAdd({
     Key key,
+    this.controller
   }) : super(key: key);
 
   @override
@@ -35,187 +37,197 @@ class ComprasAdd extends StatefulWidget {
 }
 
 class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
-  List<Step> steps = [
-    Step(
-        title: Text(
-          'Dados da Compra',
-          style: TextStyle(
-            fontFamily: 'Yu Gothic',
-            fontSize: 22,
-            color: const Color(0xff707070),
+
+  List<Step> buildList(){
+    return [
+      Step(
+          title: Text(
+            'Dados da Compra',
+            style: TextStyle(
+              fontFamily: 'Yu Gothic',
+              fontSize: 22,
+              color: const Color(0xff707070),
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-        state: StepState.indexed,
-        content: Column(
-          children: [
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: compraNomeController,
-              campo: 'Nome da compra',
-              icon: Icons.edit,
-              type: TextInputType.text,
-            ),
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: compradorNomeController,
-              campo: 'Nome do Comprador',
-              icon: Icons.person_outline,
-              type: TextInputType.text,
-            ),
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: localDaCompraController,
-              campo: 'Local da compra',
-              icon: Icons.shop,
-              type: TextInputType.text,
-            ),
-          ],
-        )),
-    Step(
-        title: Text(
-          'Itens da Compra',
-          style: TextStyle(
-            fontFamily: 'Yu Gothic',
-            fontSize: 22,
-            color: const Color(0xff707070),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        state: StepState.indexed,
-        content: Column(
-          children: [
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: itemNomeController,
-              campo: 'Nome do item',
-              icon: Icons.edit,
-              type: TextInputType.text,
-            ),
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: quantidadeCompradaController,
-              campo: 'Quantidade Compradada',
-              icon: Icons.person_outline,
-              type: TextInputType.number,
-            ),
-            FormFieldCustom(
-              validacao: isEmptyValidation,
-              controller: custoItemController,
-              campo: 'Custo do item',
-              icon: Icons.shop,
-              type: TextInputType.number,
-            ),
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              onPressed: () {
-                var itemNovo = ModelItensCompra(
-                    itemComprado: ModelItem(
-                        nome: itemNomeController.text,
-                        preco: double.parse(custoItemController.text)),
-                    quantidadeComprada:
-                        int.parse(quantidadeCompradaController.text));
-                var controllerCompra = Modular.get<ComprasController>();
-                controllerCompra.addItemToList(itemNovo);
-                itemNomeController.text = "";
-                custoItemController.text = "";
-                quantidadeCompradaController.text = "";
-              },
-              color: Color(0xfff38282),
-              child: Text(
-                'Adicionar Item',
-                style: TextStyle(
-                  fontFamily: 'Leelawadee UI',
-                  fontSize: 18,
-                  color: const Color(0xffffffff),
-                  height: 1.0777777777777777,
-                ),
-                textAlign: TextAlign.left,
+          state: StepState.indexed,
+          content: Column(
+            children: [
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: compraNomeController,
+                campo: 'Nome da compra',
+                icon: Icons.edit,
+                type: TextInputType.text,
               ),
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: compradorNomeController,
+                campo: 'Nome do Comprador',
+                icon: Icons.person_outline,
+                type: TextInputType.text,
+              ),
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: localDaCompraController,
+                campo: 'Local da compra',
+                icon: Icons.shop,
+                type: TextInputType.text,
+              ),
+            ],
+          )),
+      Step(
+          title: Text(
+            'Itens da Compra',
+            style: TextStyle(
+              fontFamily: 'Yu Gothic',
+              fontSize: 22,
+              color: const Color(0xff707070),
             ),
-            Observer(
-              builder: (_) {
-                var controllerCompra = Modular.get<ComprasController>();
-                if (controllerCompra.itensCompra.length > 0) {
-                  return SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      itemCount: controllerCompra.itensCompra.length,
-                      itemBuilder: (_, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 70.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 10, right: 10),
-                              child: Container(
-                                width: 287.0,
-                                height: 43.0,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffffffff),
-                                  border: Border.all(
-                                      width: 1.0,
-                                      color: const Color(0xff707070)),
-                                ),
-                                child: ListTile(
-                                  title: Text(controllerCompra
-                                      .itensCompra[index].itemComprado.nome),
-                                  trailing: TextButton(
-                                    child: Icon(Icons.delete_forever),
-                                    onPressed: () {
-                                      controllerCompra
-                                          .removeItemFromList(index);
-                                    },
+            textAlign: TextAlign.center,
+          ),
+          state: StepState.indexed,
+          content: Column(
+            children: [
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: itemNomeController,
+                campo: 'Nome do item',
+                icon: Icons.edit,
+                type: TextInputType.text,
+              ),
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: quantidadeCompradaController,
+                campo: 'Quantidade Compradada',
+                icon: Icons.person_outline,
+                type: TextInputType.number,
+              ),
+              FormFieldCustom(
+                validacao: isEmptyValidation,
+                controller: custoItemController,
+                campo: 'Custo do item',
+                icon: Icons.shop,
+                type: TextInputType.number,
+              ),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                onPressed: () {
+                  var itemNovo = ModelItensCompra(
+                      itemComprado: ModelItem(
+                          nome: itemNomeController.text,
+                          preco: double.parse(custoItemController.text)),
+                      quantidadeComprada:
+                          int.parse(quantidadeCompradaController.text));
+                  controller.addItemToList(itemNovo);
+                  itemNomeController.text = "";
+                  custoItemController.text = "";
+                  quantidadeCompradaController.text = "";
+                },
+                color: Color(0xfff38282),
+                child: Text(
+                  'Adicionar Item',
+                  style: TextStyle(
+                    fontFamily: 'Leelawadee UI',
+                    fontSize: 18,
+                    color: const Color(0xffffffff),
+                    height: 1.0777777777777777,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Observer(
+                builder: (_) {
+                  if (controller.itensCompra.length > 0) {
+                    return SizedBox(
+                      height: 150,
+                      child: ListView.builder(
+                        itemCount: controller.itensCompra.length,
+                        itemBuilder: (_, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 70.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  width: 287.0,
+                                  height: 43.0,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                        width: 1.0,
+                                        color: const Color(0xff707070)),
+                                  ),
+                                  child: ListTile(
+                                    title: Text(controller
+                                        .itensCompra[index].itemComprado.nome),
+                                    trailing: TextButton(
+                                      child: Icon(Icons.delete_forever),
+                                      onPressed: () {
+                                        controller
+                                            .removeItemFromList(index);
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              Center(
+                child: Observer(builder: (context) {
+                  return controller.loading
+                      ? CircularProgressIndicator()
+                      : FlatButton(
+                          color: Color(0xfff38282),
+                          onPressed: () async {
+                            await controller.createCompra(
+                                compradorNomeController.text,
+                                compraNomeController.text,
+                                localDaCompraController.text);
+                            compraNomeController.text = "";
+                            compradorNomeController.text = "";
+                            localDaCompraController.text = "";
+                            controller.getCompras();
+                            Navigator.pop(context);
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(19.0),
+                          ),
+                          child: Text(
+                            'Terminar',
+                            style: TextStyle(
+                              fontFamily: 'Leelawadee UI',
+                              fontSize: 26,
+                              color: const Color(0xffffffff),
+                              height: 2,
+                            ),
+                            textAlign: TextAlign.left,
                           ),
                         );
-                      },
-                    ),
-                  );
-                }
-                return Container();
-              },
-            ),
-            Center(
-              child: Observer(builder: (context) {
-                var controllerCompra = Modular.get<ComprasController>();
-                return controllerCompra.loading
-                    ? CircularProgressIndicator()
-                    : FlatButton(
-                        color: Color(0xfff38282),
-                        onPressed: () async {
-                          var controllerCompra =
-                              Modular.get<ComprasController>();
-                          await controllerCompra.createCompra(
-                              compradorNomeController.text,
-                              compraNomeController.text,
-                              localDaCompraController.text);
-                          controllerCompra.getCompras();
-                          Navigator.pop(context);
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(19.0),
-                        ),
-                        child: Text(
-                          'Terminar',
-                          style: TextStyle(
-                            fontFamily: 'Leelawadee UI',
-                            fontSize: 26,
-                            color: const Color(0xffffffff),
-                            height: 2,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      );
-              }),
-            )
-          ],
-        )),
-  ];
+                }),
+              )
+            ],
+          )),
+    ];
+  }
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      compraNomeController.text = "";
+      compradorNomeController.text = "";
+      localDaCompraController.text = "";
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +288,7 @@ class _ComprasAddState extends ModularState<ComprasAdd, ComprasController> {
           return SingleChildScrollView(
             child: Stepper(
               physics: ClampingScrollPhysics(),
-              steps: steps,
+              steps: buildList(),
               type: StepperType.vertical,
               currentStep: controller.criarCompraCurrentStep,
               onStepContinue: controller.nextStep,

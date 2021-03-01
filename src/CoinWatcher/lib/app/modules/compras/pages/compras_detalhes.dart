@@ -5,21 +5,25 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class ComprasDetalhes extends StatefulWidget {
+  ComprasController controller;
+  ComprasDetalhes({Key key, this.controller}) : super(key: key);
+
   @override
   _ComprasDetalhesState createState() => _ComprasDetalhesState();
 }
 
-class _ComprasDetalhesState
-    extends ModularState<ComprasDetalhes, ComprasController> {
+class _ComprasDetalhesState extends State<ComprasDetalhes> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller
-          .numeroItensPorLocal(controller.detalhesCompra.localDeCompra.idLocal);
-      controller.custoTotalCompra(controller.detalhesCompra.idCompra);
+      widget.controller
+          .numeroItensPorLocal(widget.controller.detalhesCompra.localDeCompra.idLocal);
+      widget.controller.custoTotalCompra(widget.controller.detalhesCompra.idCompra);
     });
   }
 
@@ -27,7 +31,7 @@ class _ComprasDetalhesState
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    controller.detalhesCompra = null;
+    widget.controller.detalhesCompra = null;
   }
 
   @override
@@ -66,7 +70,7 @@ class _ComprasDetalhesState
                       ),
                       Center(
                         child: Text(
-                          controller.detalhesCompra.nomeCompra,
+                          widget.controller.detalhesCompra.nomeCompra,
                           style: TextStyle(
                             fontFamily: 'Yu Gothic',
                             fontSize: 35,
@@ -88,7 +92,7 @@ class _ComprasDetalhesState
         children: [
           Observer(
             builder: (BuildContext context) {
-              return controller.loading
+              return widget.controller.loading
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
@@ -104,7 +108,8 @@ class _ComprasDetalhesState
                                   child: FlatButton(
                                     color: Color(0xfff38282),
                                     onPressed: () {
-                                      Navigator.pushNamed(context, "/compra-editar");
+                                      Navigator.pushNamed(
+                                          context, "/compra-editar");
                                     },
                                     child: Icon(Icons.edit),
                                   ),
@@ -114,7 +119,7 @@ class _ComprasDetalhesState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      controller.detalhesCompra.comprador.nome,
+                                      widget.controller.detalhesCompra.comprador.nome,
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
                                         fontSize: 33,
@@ -124,7 +129,7 @@ class _ComprasDetalhesState
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      controller
+                                      widget.controller
                                           .detalhesCompra.localDeCompra.nome,
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
@@ -135,7 +140,7 @@ class _ComprasDetalhesState
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      "Custo Total: ${controller.custoTotal}",
+                                      "Custo Total: ${widget.controller.custoTotal}",
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
                                         fontSize: 20,
@@ -145,7 +150,7 @@ class _ComprasDetalhesState
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      "Itens já comprados nesse local: ${controller.itensPorLocal}",
+                                      "Itens já comprados nesse local: ${widget.controller.itensPorLocal}",
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
                                         fontSize: 15,
@@ -156,7 +161,7 @@ class _ComprasDetalhesState
                                     ),
                                     Text(
                                       DateFormat('yyyy-MM-dd HH:mm').format(
-                                          controller.detalhesCompra.createdAt),
+                                          widget.controller.detalhesCompra.createdAt),
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
                                         fontSize: 20,

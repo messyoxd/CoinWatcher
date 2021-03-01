@@ -11,6 +11,8 @@ import 'package:CoinWatcher/app/shared/InterfacesRepositorios/ICompras.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/IItens.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/IItensCompras.dart';
 import 'package:CoinWatcher/app/shared/InterfacesRepositorios/ILocais.dart';
+import 'package:CoinWatcher/app/shared/widgets/snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -99,10 +101,18 @@ abstract class _ComprasControllerBase with Store {
   int itensPorLocal = 0;
 
   @action
-  removeCompra(int indexCompra) {
+  removeCompra(int indexCompra, context) async {
     var compra = compras[indexCompra];
-    compraRepository.remove(compra.idCompra);
-    compras.removeAt(indexCompra);
+    try {
+      await compraRepository.remove(compra.idCompra);
+    } catch (e) {
+      print(e.toString());
+      showSnackBar(context, msg: "Erro ao deletar!");
+      return 0;
+    } finally {
+      compras.removeAt(indexCompra);
+    }
+    return 1;
   }
 
   @action

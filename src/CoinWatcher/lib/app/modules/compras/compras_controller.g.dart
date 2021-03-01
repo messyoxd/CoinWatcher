@@ -209,6 +209,15 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
         () => super.editarCompra(compra, novoNome, novoComprador, novoLocal));
   }
 
+  final _$removeCompraAsyncAction =
+      AsyncAction('_ComprasControllerBase.removeCompra');
+
+  @override
+  Future removeCompra(int indexCompra, dynamic context) {
+    return _$removeCompraAsyncAction
+        .run(() => super.removeCompra(indexCompra, context));
+  }
+
   final _$numeroItensPorLocalAsyncAction =
       AsyncAction('_ComprasControllerBase.numeroItensPorLocal');
 
@@ -261,17 +270,6 @@ mixin _$ComprasController on _ComprasControllerBase, Store {
         name: '_ComprasControllerBase.buscar');
     try {
       return super.buscar(busca);
-    } finally {
-      _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic removeCompra(int indexCompra) {
-    final _$actionInfo = _$_ComprasControllerBaseActionController.startAction(
-        name: '_ComprasControllerBase.removeCompra');
-    try {
-      return super.removeCompra(indexCompra);
     } finally {
       _$_ComprasControllerBaseActionController.endAction(_$actionInfo);
     }

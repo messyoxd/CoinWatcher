@@ -38,6 +38,7 @@ dependencies:
   flutter_mobx: 
   mobx: 
   moor_flutter:
+  flushbar: ^1.10.4
   flutter_modular: 
   adobe_xd: ^1.1.0+1
   flutter_svg:

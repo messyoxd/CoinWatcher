@@ -75,7 +75,42 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future remove(int id) async {
-    String sqlString = "delete from compras where idCompra = " + "$id" + ";";
+    Compra aux;
+    try {
+      await customSelect("select * from compras where idCompra = '1' LIMIT 1;",
+          readsFrom: {db.compras}).get().then((row) {
+        aux = Compra.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Localizacao id2;
+    try {
+      await customSelect(
+              "select * from localizacoes where idLocal = '1' LIMIT 1;")
+          .get()
+          .then((row) {
+        id2 = Localizacao.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+    Comprador id3;
+    try {
+      await customSelect(
+              "select * from compradores where idComprador = '1' LIMIT 1;")
+          .get()
+          .then((row) {
+        id3 = Comprador.fromData(row.first.data, db);
+      });
+    } catch (e) {
+      print(e.toString());
+      throw (e.toString());
+    }
+
+    String sqlString = "delete from compras where idCompra = " + "'$id'" + ";";
     int i;
     try {
       i = await customUpdate(sqlString,
@@ -248,9 +283,8 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future<int> calcularQuantosItensLocal(int id) async {
-    String sqlString =
-        "select Count(idItem) as quantidadeItens from Itens " +
-        "where Itens.localComprado IN "+
+    String sqlString = "select Count(idItem) as quantidadeItens from Itens " +
+        "where Itens.localComprado IN " +
         "(Select idLocal from localizacoes where localizacoes.idLocal = $id);";
 
     var res = List<Map<String, dynamic>>();

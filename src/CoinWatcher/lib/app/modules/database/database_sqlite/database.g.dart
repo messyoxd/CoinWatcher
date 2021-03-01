@@ -7,6 +7,282 @@ part of 'database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+class Localizacao extends DataClass implements Insertable<Localizacao> {
+  final int idLocal;
+  final String nome;
+  final String createdAt;
+  final String updatedAt;
+  Localizacao(
+      {@required this.idLocal,
+      @required this.nome,
+      this.createdAt,
+      this.updatedAt});
+  factory Localizacao.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Localizacao(
+      idLocal:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}idLocal']),
+      nome: stringType.mapFromDatabaseResponse(data['${effectivePrefix}nome']),
+      createdAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
+      updatedAt: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || idLocal != null) {
+      map['idLocal'] = Variable<int>(idLocal);
+    }
+    if (!nullToAbsent || nome != null) {
+      map['nome'] = Variable<String>(nome);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['createdAt'] = Variable<String>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updatedAt'] = Variable<String>(updatedAt);
+    }
+    return map;
+  }
+
+  LocalizacoesCompanion toCompanion(bool nullToAbsent) {
+    return LocalizacoesCompanion(
+      idLocal: idLocal == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idLocal),
+      nome: nome == null && nullToAbsent ? const Value.absent() : Value(nome),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory Localizacao.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Localizacao(
+      idLocal: serializer.fromJson<int>(json['idLocal']),
+      nome: serializer.fromJson<String>(json['nome']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'idLocal': serializer.toJson<int>(idLocal),
+      'nome': serializer.toJson<String>(nome),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+    };
+  }
+
+  Localizacao copyWith(
+          {int idLocal, String nome, String createdAt, String updatedAt}) =>
+      Localizacao(
+        idLocal: idLocal ?? this.idLocal,
+        nome: nome ?? this.nome,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Localizacao(')
+          ..write('idLocal: $idLocal, ')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(idLocal.hashCode,
+      $mrjc(nome.hashCode, $mrjc(createdAt.hashCode, updatedAt.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Localizacao &&
+          other.idLocal == this.idLocal &&
+          other.nome == this.nome &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class LocalizacoesCompanion extends UpdateCompanion<Localizacao> {
+  final Value<int> idLocal;
+  final Value<String> nome;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
+  const LocalizacoesCompanion({
+    this.idLocal = const Value.absent(),
+    this.nome = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  LocalizacoesCompanion.insert({
+    this.idLocal = const Value.absent(),
+    @required String nome,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : nome = Value(nome);
+  static Insertable<Localizacao> custom({
+    Expression<int> idLocal,
+    Expression<String> nome,
+    Expression<String> createdAt,
+    Expression<String> updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (idLocal != null) 'idLocal': idLocal,
+      if (nome != null) 'nome': nome,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
+    });
+  }
+
+  LocalizacoesCompanion copyWith(
+      {Value<int> idLocal,
+      Value<String> nome,
+      Value<String> createdAt,
+      Value<String> updatedAt}) {
+    return LocalizacoesCompanion(
+      idLocal: idLocal ?? this.idLocal,
+      nome: nome ?? this.nome,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (idLocal.present) {
+      map['idLocal'] = Variable<int>(idLocal.value);
+    }
+    if (nome.present) {
+      map['nome'] = Variable<String>(nome.value);
+    }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updatedAt'] = Variable<String>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalizacoesCompanion(')
+          ..write('idLocal: $idLocal, ')
+          ..write('nome: $nome, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class Localizacoes extends Table with TableInfo<Localizacoes, Localizacao> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  Localizacoes(this._db, [this._alias]);
+  final VerificationMeta _idLocalMeta = const VerificationMeta('idLocal');
+  GeneratedIntColumn _idLocal;
+  GeneratedIntColumn get idLocal => _idLocal ??= _constructIdLocal();
+  GeneratedIntColumn _constructIdLocal() {
+    return GeneratedIntColumn('idLocal', $tableName, false,
+        $customConstraints: 'NOT NULL');
+  }
+
+  final VerificationMeta _nomeMeta = const VerificationMeta('nome');
+  GeneratedTextColumn _nome;
+  GeneratedTextColumn get nome => _nome ??= _constructNome();
+  GeneratedTextColumn _constructNome() {
+    return GeneratedTextColumn('nome', $tableName, false,
+        $customConstraints: 'NOT NULL');
+  }
+
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedTextColumn _createdAt;
+  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedTextColumn _constructCreatedAt() {
+    return GeneratedTextColumn('createdAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  GeneratedTextColumn _updatedAt;
+  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
+  GeneratedTextColumn _constructUpdatedAt() {
+    return GeneratedTextColumn('updatedAt', $tableName, true,
+        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
+        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [idLocal, nome, createdAt, updatedAt];
+  @override
+  Localizacoes get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'Localizacoes';
+  @override
+  final String actualTableName = 'Localizacoes';
+  @override
+  VerificationContext validateIntegrity(Insertable<Localizacao> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('idLocal')) {
+      context.handle(_idLocalMeta,
+          idLocal.isAcceptableOrUnknown(data['idLocal'], _idLocalMeta));
+    }
+    if (data.containsKey('nome')) {
+      context.handle(
+          _nomeMeta, nome.isAcceptableOrUnknown(data['nome'], _nomeMeta));
+    } else if (isInserting) {
+      context.missing(_nomeMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
+    }
+    if (data.containsKey('updatedAt')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idLocal};
+  @override
+  Localizacao map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Localizacao.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Localizacoes createAlias(String alias) {
+    return Localizacoes(_db, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY (idLocal)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class Comprador extends DataClass implements Insertable<Comprador> {
   final int idComprador;
   final String nome;
@@ -288,282 +564,6 @@ class Compradores extends Table with TableInfo<Compradores, Comprador> {
   bool get dontWriteConstraints => true;
 }
 
-class Localizacao extends DataClass implements Insertable<Localizacao> {
-  final int idLocal;
-  final String nome;
-  final String createdAt;
-  final String updatedAt;
-  Localizacao(
-      {@required this.idLocal,
-      @required this.nome,
-      this.createdAt,
-      this.updatedAt});
-  factory Localizacao.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    return Localizacao(
-      idLocal:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}idLocal']),
-      nome: stringType.mapFromDatabaseResponse(data['${effectivePrefix}nome']),
-      createdAt: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}createdAt']),
-      updatedAt: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}updatedAt']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || idLocal != null) {
-      map['idLocal'] = Variable<int>(idLocal);
-    }
-    if (!nullToAbsent || nome != null) {
-      map['nome'] = Variable<String>(nome);
-    }
-    if (!nullToAbsent || createdAt != null) {
-      map['createdAt'] = Variable<String>(createdAt);
-    }
-    if (!nullToAbsent || updatedAt != null) {
-      map['updatedAt'] = Variable<String>(updatedAt);
-    }
-    return map;
-  }
-
-  LocalizacoesCompanion toCompanion(bool nullToAbsent) {
-    return LocalizacoesCompanion(
-      idLocal: idLocal == null && nullToAbsent
-          ? const Value.absent()
-          : Value(idLocal),
-      nome: nome == null && nullToAbsent ? const Value.absent() : Value(nome),
-      createdAt: createdAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(createdAt),
-      updatedAt: updatedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedAt),
-    );
-  }
-
-  factory Localizacao.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Localizacao(
-      idLocal: serializer.fromJson<int>(json['idLocal']),
-      nome: serializer.fromJson<String>(json['nome']),
-      createdAt: serializer.fromJson<String>(json['createdAt']),
-      updatedAt: serializer.fromJson<String>(json['updatedAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'idLocal': serializer.toJson<int>(idLocal),
-      'nome': serializer.toJson<String>(nome),
-      'createdAt': serializer.toJson<String>(createdAt),
-      'updatedAt': serializer.toJson<String>(updatedAt),
-    };
-  }
-
-  Localizacao copyWith(
-          {int idLocal, String nome, String createdAt, String updatedAt}) =>
-      Localizacao(
-        idLocal: idLocal ?? this.idLocal,
-        nome: nome ?? this.nome,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Localizacao(')
-          ..write('idLocal: $idLocal, ')
-          ..write('nome: $nome, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(idLocal.hashCode,
-      $mrjc(nome.hashCode, $mrjc(createdAt.hashCode, updatedAt.hashCode))));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is Localizacao &&
-          other.idLocal == this.idLocal &&
-          other.nome == this.nome &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
-}
-
-class LocalizacoesCompanion extends UpdateCompanion<Localizacao> {
-  final Value<int> idLocal;
-  final Value<String> nome;
-  final Value<String> createdAt;
-  final Value<String> updatedAt;
-  const LocalizacoesCompanion({
-    this.idLocal = const Value.absent(),
-    this.nome = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  });
-  LocalizacoesCompanion.insert({
-    this.idLocal = const Value.absent(),
-    @required String nome,
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  }) : nome = Value(nome);
-  static Insertable<Localizacao> custom({
-    Expression<int> idLocal,
-    Expression<String> nome,
-    Expression<String> createdAt,
-    Expression<String> updatedAt,
-  }) {
-    return RawValuesInsertable({
-      if (idLocal != null) 'idLocal': idLocal,
-      if (nome != null) 'nome': nome,
-      if (createdAt != null) 'createdAt': createdAt,
-      if (updatedAt != null) 'updatedAt': updatedAt,
-    });
-  }
-
-  LocalizacoesCompanion copyWith(
-      {Value<int> idLocal,
-      Value<String> nome,
-      Value<String> createdAt,
-      Value<String> updatedAt}) {
-    return LocalizacoesCompanion(
-      idLocal: idLocal ?? this.idLocal,
-      nome: nome ?? this.nome,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (idLocal.present) {
-      map['idLocal'] = Variable<int>(idLocal.value);
-    }
-    if (nome.present) {
-      map['nome'] = Variable<String>(nome.value);
-    }
-    if (createdAt.present) {
-      map['createdAt'] = Variable<String>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updatedAt'] = Variable<String>(updatedAt.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LocalizacoesCompanion(')
-          ..write('idLocal: $idLocal, ')
-          ..write('nome: $nome, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class Localizacoes extends Table with TableInfo<Localizacoes, Localizacao> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  Localizacoes(this._db, [this._alias]);
-  final VerificationMeta _idLocalMeta = const VerificationMeta('idLocal');
-  GeneratedIntColumn _idLocal;
-  GeneratedIntColumn get idLocal => _idLocal ??= _constructIdLocal();
-  GeneratedIntColumn _constructIdLocal() {
-    return GeneratedIntColumn('idLocal', $tableName, false,
-        $customConstraints: 'NOT NULL');
-  }
-
-  final VerificationMeta _nomeMeta = const VerificationMeta('nome');
-  GeneratedTextColumn _nome;
-  GeneratedTextColumn get nome => _nome ??= _constructNome();
-  GeneratedTextColumn _constructNome() {
-    return GeneratedTextColumn('nome', $tableName, false,
-        $customConstraints: 'NOT NULL');
-  }
-
-  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
-  GeneratedTextColumn _createdAt;
-  GeneratedTextColumn get createdAt => _createdAt ??= _constructCreatedAt();
-  GeneratedTextColumn _constructCreatedAt() {
-    return GeneratedTextColumn('createdAt', $tableName, true,
-        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
-        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
-  }
-
-  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
-  GeneratedTextColumn _updatedAt;
-  GeneratedTextColumn get updatedAt => _updatedAt ??= _constructUpdatedAt();
-  GeneratedTextColumn _constructUpdatedAt() {
-    return GeneratedTextColumn('updatedAt', $tableName, true,
-        $customConstraints: 'DEFAULT CURRENT_TIMESTAMP',
-        defaultValue: const CustomExpression<String>('CURRENT_TIMESTAMP'));
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [idLocal, nome, createdAt, updatedAt];
-  @override
-  Localizacoes get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'Localizacoes';
-  @override
-  final String actualTableName = 'Localizacoes';
-  @override
-  VerificationContext validateIntegrity(Insertable<Localizacao> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('idLocal')) {
-      context.handle(_idLocalMeta,
-          idLocal.isAcceptableOrUnknown(data['idLocal'], _idLocalMeta));
-    }
-    if (data.containsKey('nome')) {
-      context.handle(
-          _nomeMeta, nome.isAcceptableOrUnknown(data['nome'], _nomeMeta));
-    } else if (isInserting) {
-      context.missing(_nomeMeta);
-    }
-    if (data.containsKey('createdAt')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['createdAt'], _createdAtMeta));
-    }
-    if (data.containsKey('updatedAt')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updatedAt'], _updatedAtMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {idLocal};
-  @override
-  Localizacao map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Localizacao.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Localizacoes createAlias(String alias) {
-    return Localizacoes(_db, alias);
-  }
-
-  @override
-  List<String> get customConstraints => const ['PRIMARY KEY (idLocal)'];
-  @override
-  bool get dontWriteConstraints => true;
-}
-
 class Compra extends DataClass implements Insertable<Compra> {
   final int idCompra;
   final int localDeCompra;
@@ -573,8 +573,8 @@ class Compra extends DataClass implements Insertable<Compra> {
   final String updatedAt;
   Compra(
       {@required this.idCompra,
-      @required this.localDeCompra,
-      @required this.comprador,
+      this.localDeCompra,
+      this.comprador,
       @required this.nomeCompra,
       this.createdAt,
       this.updatedAt});
@@ -736,14 +736,12 @@ class ComprasCompanion extends UpdateCompanion<Compra> {
   });
   ComprasCompanion.insert({
     this.idCompra = const Value.absent(),
-    @required int localDeCompra,
-    @required int comprador,
+    this.localDeCompra = const Value.absent(),
+    this.comprador = const Value.absent(),
     @required String nomeCompra,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : localDeCompra = Value(localDeCompra),
-        comprador = Value(comprador),
-        nomeCompra = Value(nomeCompra);
+  }) : nomeCompra = Value(nomeCompra);
   static Insertable<Compra> custom({
     Expression<int> idCompra,
     Expression<int> localDeCompra,
@@ -835,16 +833,18 @@ class Compras extends Table with TableInfo<Compras, Compra> {
   GeneratedIntColumn get localDeCompra =>
       _localDeCompra ??= _constructLocalDeCompra();
   GeneratedIntColumn _constructLocalDeCompra() {
-    return GeneratedIntColumn('localDeCompra', $tableName, false,
-        $customConstraints: 'NOT NULL');
+    return GeneratedIntColumn('localDeCompra', $tableName, true,
+        $customConstraints:
+            'REFERENCES Localizacoes (idLocal) ON DELETE CASCADE');
   }
 
   final VerificationMeta _compradorMeta = const VerificationMeta('comprador');
   GeneratedIntColumn _comprador;
   GeneratedIntColumn get comprador => _comprador ??= _constructComprador();
   GeneratedIntColumn _constructComprador() {
-    return GeneratedIntColumn('comprador', $tableName, false,
-        $customConstraints: 'NOT NULL');
+    return GeneratedIntColumn('comprador', $tableName, true,
+        $customConstraints:
+            'REFERENCES Compradores (idComprador) ON DELETE CASCADE');
   }
 
   final VerificationMeta _nomeCompraMeta = const VerificationMeta('nomeCompra');
@@ -896,14 +896,10 @@ class Compras extends Table with TableInfo<Compras, Compra> {
           _localDeCompraMeta,
           localDeCompra.isAcceptableOrUnknown(
               data['localDeCompra'], _localDeCompraMeta));
-    } else if (isInserting) {
-      context.missing(_localDeCompraMeta);
     }
     if (data.containsKey('comprador')) {
       context.handle(_compradorMeta,
           comprador.isAcceptableOrUnknown(data['comprador'], _compradorMeta));
-    } else if (isInserting) {
-      context.missing(_compradorMeta);
     }
     if (data.containsKey('nomeCompra')) {
       context.handle(
@@ -938,11 +934,7 @@ class Compras extends Table with TableInfo<Compras, Compra> {
   }
 
   @override
-  List<String> get customConstraints => const [
-        'PRIMARY KEY (idCompra)',
-        'CONSTRAINT comprador\r\n    FOREIGN KEY (comprador)\r\n    REFERENCES Compradores (idComprador)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION',
-        'CONSTRAINT local\r\n    FOREIGN KEY (localDeCompra)\r\n    REFERENCES Localizacoes (idLocal)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION'
-      ];
+  List<String> get customConstraints => const ['PRIMARY KEY (idCompra)'];
   @override
   bool get dontWriteConstraints => true;
 }
@@ -958,7 +950,7 @@ class Item extends DataClass implements Insertable<Item> {
       {@required this.idItem,
       @required this.nome,
       @required this.preco,
-      @required this.localComprado,
+      this.localComprado,
       this.createdAt,
       this.updatedAt});
   factory Item.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -1116,12 +1108,11 @@ class ItensCompanion extends UpdateCompanion<Item> {
     this.idItem = const Value.absent(),
     @required String nome,
     @required double preco,
-    @required int localComprado,
+    this.localComprado = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   })  : nome = Value(nome),
-        preco = Value(preco),
-        localComprado = Value(localComprado);
+        preco = Value(preco);
   static Insertable<Item> custom({
     Expression<int> idItem,
     Expression<String> nome,
@@ -1229,8 +1220,9 @@ class Itens extends Table with TableInfo<Itens, Item> {
   GeneratedIntColumn get localComprado =>
       _localComprado ??= _constructLocalComprado();
   GeneratedIntColumn _constructLocalComprado() {
-    return GeneratedIntColumn('localComprado', $tableName, false,
-        $customConstraints: 'NOT NULL');
+    return GeneratedIntColumn('localComprado', $tableName, true,
+        $customConstraints:
+            'REFERENCES Localizacoes (idLocal) ON DELETE CASCADE');
   }
 
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
@@ -1286,8 +1278,6 @@ class Itens extends Table with TableInfo<Itens, Item> {
           _localCompradoMeta,
           localComprado.isAcceptableOrUnknown(
               data['localComprado'], _localCompradoMeta));
-    } else if (isInserting) {
-      context.missing(_localCompradoMeta);
     }
     if (data.containsKey('createdAt')) {
       context.handle(_createdAtMeta,
@@ -1314,10 +1304,7 @@ class Itens extends Table with TableInfo<Itens, Item> {
   }
 
   @override
-  List<String> get customConstraints => const [
-        'PRIMARY KEY (idItem)',
-        'CONSTRAINT localComprado\r\n    FOREIGN KEY (localComprado)\r\n    REFERENCES Localizacoes (idLocal)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION'
-      ];
+  List<String> get customConstraints => const ['PRIMARY KEY (idItem)'];
   @override
   bool get dontWriteConstraints => true;
 }
@@ -1331,9 +1318,9 @@ class ItensCompra extends DataClass implements Insertable<ItensCompra> {
   final String updatedAt;
   ItensCompra(
       {@required this.idItensCompra,
-      @required this.compra,
+      this.compra,
       @required this.quantidadeComprada,
-      @required this.itemComprado,
+      this.itemComprado,
       this.createdAt,
       this.updatedAt});
   factory ItensCompra.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -1492,14 +1479,12 @@ class ItensComprasCompanion extends UpdateCompanion<ItensCompra> {
   });
   ItensComprasCompanion.insert({
     this.idItensCompra = const Value.absent(),
-    @required int compra,
+    this.compra = const Value.absent(),
     @required int quantidadeComprada,
-    @required int itemComprado,
+    this.itemComprado = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : compra = Value(compra),
-        quantidadeComprada = Value(quantidadeComprada),
-        itemComprado = Value(itemComprado);
+  }) : quantidadeComprada = Value(quantidadeComprada);
   static Insertable<ItensCompra> custom({
     Expression<int> idItensCompra,
     Expression<int> compra,
@@ -1591,8 +1576,8 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
   GeneratedIntColumn _compra;
   GeneratedIntColumn get compra => _compra ??= _constructCompra();
   GeneratedIntColumn _constructCompra() {
-    return GeneratedIntColumn('compra', $tableName, false,
-        $customConstraints: 'NOT NULL');
+    return GeneratedIntColumn('compra', $tableName, true,
+        $customConstraints: 'REFERENCES Compras (idCompra) ON DELETE CASCADE');
   }
 
   final VerificationMeta _quantidadeCompradaMeta =
@@ -1611,8 +1596,8 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
   GeneratedIntColumn get itemComprado =>
       _itemComprado ??= _constructItemComprado();
   GeneratedIntColumn _constructItemComprado() {
-    return GeneratedIntColumn('itemComprado', $tableName, false,
-        $customConstraints: 'NOT NULL');
+    return GeneratedIntColumn('itemComprado', $tableName, true,
+        $customConstraints: 'REFERENCES Itens (idItem) ON DELETE CASCADE');
   }
 
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
@@ -1662,8 +1647,6 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
     if (data.containsKey('compra')) {
       context.handle(_compraMeta,
           compra.isAcceptableOrUnknown(data['compra'], _compraMeta));
-    } else if (isInserting) {
-      context.missing(_compraMeta);
     }
     if (data.containsKey('QuantidadeComprada')) {
       context.handle(
@@ -1678,8 +1661,6 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
           _itemCompradoMeta,
           itemComprado.isAcceptableOrUnknown(
               data['itemComprado'], _itemCompradoMeta));
-    } else if (isInserting) {
-      context.missing(_itemCompradoMeta);
     }
     if (data.containsKey('createdAt')) {
       context.handle(_createdAtMeta,
@@ -1706,21 +1687,17 @@ class ItensCompras extends Table with TableInfo<ItensCompras, ItensCompra> {
   }
 
   @override
-  List<String> get customConstraints => const [
-        'PRIMARY KEY (idItensCompra)',
-        'CONSTRAINT compraId\r\n    FOREIGN KEY (compra)\r\n    REFERENCES Compras (idCompra)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION',
-        'CONSTRAINT fk_ItensCompra_Item1\r\n    FOREIGN KEY (itemComprado)\r\n    REFERENCES Itens (idItem)\r\n    ON DELETE NO ACTION\r\n    ON UPDATE NO ACTION'
-      ];
+  List<String> get customConstraints => const ['PRIMARY KEY (idItensCompra)'];
   @override
   bool get dontWriteConstraints => true;
 }
 
 abstract class _$CoinWatcherDb extends GeneratedDatabase {
   _$CoinWatcherDb(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  Compradores _compradores;
-  Compradores get compradores => _compradores ??= Compradores(this);
   Localizacoes _localizacoes;
   Localizacoes get localizacoes => _localizacoes ??= Localizacoes(this);
+  Compradores _compradores;
+  Compradores get compradores => _compradores ??= Compradores(this);
   Compras _compras;
   Compras get compras => _compras ??= Compras(this);
   Itens _itens;
@@ -1746,5 +1723,45 @@ abstract class _$CoinWatcherDb extends GeneratedDatabase {
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [compradores, localizacoes, compras, itens, itensCompras];
+      [localizacoes, compradores, compras, itens, itensCompras];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('Localizacoes',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('Compras', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('Compradores',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('Compras', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('Localizacoes',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('Itens', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('Compras',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('ItensCompras', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('Itens',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('ItensCompras', kind: UpdateKind.delete),
+            ],
+          ),
+        ],
+      );
 }
