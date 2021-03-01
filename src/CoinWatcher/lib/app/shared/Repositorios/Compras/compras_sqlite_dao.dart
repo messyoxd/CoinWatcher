@@ -75,35 +75,23 @@ class ComprasSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
 
   @override
   Future remove(int id) async {
-    Compra aux;
+    List<ItensCompra> itensCompra;
     try {
-      await customSelect("select * from compras where idCompra = '1' LIMIT 1;",
-          readsFrom: {db.compras}).get().then((row) {
-        aux = Compra.fromData(row.first.data, db);
+      await customSelect("select * from itensCompras where compra = '$id'")
+          .get()
+          .then((rows) {
+        rows.forEach((row) {
+          itensCompra.add(ItensCompra.fromData(row.data, db));
+        });
       });
+      customSelect("DELETE from itensCompras where compra = '$id';");
     } catch (e) {
       print(e.toString());
       throw (e.toString());
     }
-    Localizacao id2;
     try {
-      await customSelect(
-              "select * from localizacoes where idLocal = '1' LIMIT 1;")
-          .get()
-          .then((row) {
-        id2 = Localizacao.fromData(row.first.data, db);
-      });
-    } catch (e) {
-      print(e.toString());
-      throw (e.toString());
-    }
-    Comprador id3;
-    try {
-      await customSelect(
-              "select * from compradores where idComprador = '1' LIMIT 1;")
-          .get()
-          .then((row) {
-        id3 = Comprador.fromData(row.first.data, db);
+      itensCompra.forEach((item) async {
+        customSelect("DELETE from itens where idItem = ${item.itemComprado} LIMIT 1;");
       });
     } catch (e) {
       print(e.toString());

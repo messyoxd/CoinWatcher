@@ -344,7 +344,7 @@ class ItensCompraSQLiteDAO extends DatabaseAccessor<CoinWatcherDb>
   @override
   Future<List<ModelItensCompra>> getItensCompraByCompra(int idCompra) async {
     String sqlString =
-        "select * from itensCompras where idCompra = " + "'$idCompra';";
+        "select * from itensCompras where compra = " + "'$idCompra';";
     List<ItensCompra> aux = [];
     try {
       await customSelect(sqlString, readsFrom: {db.itensCompras})

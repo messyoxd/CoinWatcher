@@ -15,15 +15,16 @@ class ComprasDetalhes extends StatefulWidget {
 }
 
 class _ComprasDetalhesState extends State<ComprasDetalhes> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      widget.controller.getItensCompra();
+      widget.controller.numeroItensPorLocal(
+          widget.controller.detalhesCompra.localDeCompra.idLocal);
       widget.controller
-          .numeroItensPorLocal(widget.controller.detalhesCompra.localDeCompra.idLocal);
-      widget.controller.custoTotalCompra(widget.controller.detalhesCompra.idCompra);
+          .custoTotalCompra(widget.controller.detalhesCompra.idCompra);
     });
   }
 
@@ -73,7 +74,7 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
                           widget.controller.detalhesCompra.nomeCompra,
                           style: TextStyle(
                             fontFamily: 'Yu Gothic',
-                            fontSize: 35,
+                            fontSize: widget.controller.detalhesCompra.nomeCompra.length > 10 ? 20 : 35,
                             color: const Color(0xffffffff),
                             height: 1.21875,
                           ),
@@ -119,21 +120,22 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.controller.detalhesCompra.comprador.nome,
+                                      widget.controller.detalhesCompra.comprador
+                                          .nome,
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
-                                        fontSize: 33,
+                                        fontSize: widget.controller.detalhesCompra.comprador.nome.length > 10 ? 20 : 35,
                                         color: const Color(0xfff38282),
                                         height: 1.7878787878787878,
                                       ),
                                       textAlign: TextAlign.left,
                                     ),
                                     Text(
-                                      widget.controller
-                                          .detalhesCompra.localDeCompra.nome,
+                                      widget.controller.detalhesCompra
+                                          .localDeCompra.nome,
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
-                                        fontSize: 20,
+                                        fontSize: widget.controller.detalhesCompra.localDeCompra.nome.length > 10 ? 12 : 20,
                                         color: const Color(0xfff38282),
                                         height: 1.7878787878787878,
                                       ),
@@ -161,7 +163,8 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
                                     ),
                                     Text(
                                       DateFormat('yyyy-MM-dd HH:mm').format(
-                                          widget.controller.detalhesCompra.createdAt),
+                                          widget.controller.detalhesCompra
+                                              .createdAt),
                                       style: TextStyle(
                                         fontFamily: 'Leelawadee UI',
                                         fontSize: 20,
@@ -170,6 +173,66 @@ class _ComprasDetalhesState extends State<ComprasDetalhes> {
                                       ),
                                       textAlign: TextAlign.left,
                                     ),
+                                    Observer(builder: (_) {
+                                      if (widget.controller.itensCompra.length >
+                                          0) {
+                                        return SizedBox(
+                                          height: 150,
+                                          child: ListView.builder(
+                                            itemCount: widget
+                                                .controller.itensCompra.length,
+                                            itemBuilder: (_, int index) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: 70.0,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10, right: 10),
+                                                    child: Container(
+                                                      width: 287.0,
+                                                      height: 43.0,
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xffffffff),
+                                                        border: Border.all(
+                                                            width: 1.0,
+                                                            color: const Color(
+                                                                0xff707070)),
+                                                      ),
+                                                      child: ListTile(
+                                                        title: Text(widget
+                                                            .controller
+                                                            .itensCompra[index]
+                                                            .itemComprado
+                                                            .nome),
+                                                        trailing: TextButton(
+                                                          child: Icon(Icons
+                                                              .delete_forever),
+                                                          onPressed: () {
+                                                            widget.controller.removeItemFromCompra(
+                                                                widget
+                                                                    .controller
+                                                                    .itensCompra[
+                                                                        index]
+                                                                    .itemComprado
+                                                                    .idItem,
+                                                                index,
+                                                                context);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }
+                                      return Container();
+                                    }),
                                   ],
                                 ),
                               ],

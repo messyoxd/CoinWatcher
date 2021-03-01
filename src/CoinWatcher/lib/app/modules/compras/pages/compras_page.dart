@@ -93,6 +93,7 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
           ],
         ),
         onPressed: () {
+          // controller.getAllCompradores();
           Navigator.pushNamed(context, "/adicionar-compra");
         },
       ),
@@ -162,73 +163,77 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                         ),
                       ),
                       FlatButton(
-                        onPressed: () {
+                        onPressed: () async {
                           controller.detalhesCompra = controller.compras[index];
+                          
                           Navigator.pushNamed(context, '/compra-detalhes',
                               arguments: controller);
                         },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 134.0,
-                              child: Text(
-                                controller.compras[index].nomeCompra,
-                                style: TextStyle(
-                                  fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
-                                  color: const Color(0xfff38282),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 134.0,
-                              child: Text(
-                                controller.compras[index].localDeCompra.nome,
-                                style: TextStyle(
-                                  fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
-                                  color: const Color(0xfff38282),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 134.0,
-                              child: Text(
-                                controller.compras[index].comprador.nome,
-                                style: TextStyle(
-                                  fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
-                                  color: const Color(0xfff38282),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 5,
-                                ),
-                                SizedBox(
-                                  width: 134.0,
-                                  child: Text(
-                                    DateFormat('yyyy-MM-dd HH:mm').format(
-                                        controller.compras[index].createdAt),
-                                    style: TextStyle(
-                                      fontFamily: 'Leelawadee UI',
-                                      fontSize: 18,
-                                      color: const Color(0xfff38282),
-                                    ),
-                                    textAlign: TextAlign.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width/2,
+                                child: Text(
+                                  "Compra: "+controller.compras[index].nomeCompra,
+                                  style: TextStyle(
+                                    fontFamily: 'Leelawadee UI',
+                                    fontSize: ("Compra: "+controller.compras[index].nomeCompra).length >= 10 ? 16 : 26,
+                                    color: const Color(0xfff38282),
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width/2,
+                                child: Text(
+                                  "Local: "+controller.compras[index].localDeCompra.nome,
+                                  style: TextStyle(
+                                    fontFamily: 'Leelawadee UI',
+                                    fontSize: ("Local: "+controller.compras[index].localDeCompra.nome).length >= 10 ? 16 : 26,
+                                    color: const Color(0xfff38282),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width/2,
+                                child: Text(
+                                  "Comprador: "+controller.compras[index].comprador.nome,
+                                  style: TextStyle(
+                                    fontFamily: 'Leelawadee UI',
+                                    fontSize: ("Comprador: "+controller.compras[index].comprador.nome).length >= 10 ? 16 : 26,
+                                    color: const Color(0xfff38282),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width / 5,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width/3,
+                                    child: Text(
+                                      DateFormat('yyyy-MM-dd HH:mm').format(
+                                          controller.compras[index].createdAt),
+                                      style: TextStyle(
+                                        fontFamily: 'Leelawadee UI',
+                                        fontSize: 18,
+                                        color: const Color(0xfff38282),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -266,38 +271,38 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                         child: Column(
                           children: [
                             SizedBox(
-                              width: 134.0,
+                              width: MediaQuery.of(context).size.width/2,
                               child: Text(
-                                controller.comprasFiltradas[index].nomeCompra,
+                                "Compra: "+controller.comprasFiltradas[index].nomeCompra,
                                 style: TextStyle(
                                   fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
+                                  fontSize: ("Compra: "+controller.compras[index].nomeCompra).length >= 10 ? 16 : 26,
                                   color: const Color(0xfff38282),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             SizedBox(
-                              width: 134.0,
+                              width:  MediaQuery.of(context).size.width/2,
                               child: Text(
-                                controller
+                                "Local: "+controller
                                     .comprasFiltradas[index].localDeCompra.nome,
                                 style: TextStyle(
                                   fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
+                                  fontSize: ("Local: "+controller.compras[index].localDeCompra.nome).length >= 10 ? 12 : 26,
                                   color: const Color(0xfff38282),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             SizedBox(
-                              width: 134.0,
+                              width:  MediaQuery.of(context).size.width/2,
                               child: Text(
-                                controller
+                                "Comprador: "+controller
                                     .comprasFiltradas[index].comprador.nome,
                                 style: TextStyle(
                                   fontFamily: 'Leelawadee UI',
-                                  fontSize: 26,
+                                  fontSize: ("Comprador: "+controller.compras[index].comprador.nome).length >= 10 ? 12 : 26,
                                   color: const Color(0xfff38282),
                                 ),
                                 textAlign: TextAlign.center,
@@ -310,7 +315,7 @@ class _ComprasState extends ModularState<Compras, ComprasController> {
                                   width: MediaQuery.of(context).size.width / 5,
                                 ),
                                 SizedBox(
-                                  width: 134.0,
+                                  width:  MediaQuery.of(context).size.width/3,
                                   child: Text(
                                     DateFormat('yyyy-MM-dd HH:mm').format(
                                         controller

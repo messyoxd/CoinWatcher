@@ -122,6 +122,17 @@ abstract class _ComprasControllerBase with Store {
     loading = false;
   }
 
+  @action
+  getItensCompra() async {
+    loading = true;
+    var aux = await itensCompraRepository.getItensCompraByCompra(detalhesCompra.idCompra);
+    itensCompra.clear();
+    aux.forEach((value){
+      itensCompra.add(value);
+    });
+    loading = false;
+  }
+
   @observable
   ModelCompra detalhesCompra;
 
@@ -154,6 +165,19 @@ abstract class _ComprasControllerBase with Store {
   @action
   removeItemFromList(int index) {
     itensCompra.removeAt(index);
+  }
+
+  @action
+  removeItemFromCompra(int idItem, int index, context){
+    try {
+      itemRepository.remove(idItem);
+      
+    } catch (e) {
+      showSnackBar(context, msg: "Erro ao remover item!");
+      return 0;
+    }
+    removeItemFromList(index);
+    return 1;
   }
 
   @action
